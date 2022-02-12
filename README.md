@@ -15,3 +15,5 @@ Topics for the semester:
  - [ ] Testing
  - [ ] Linkedin, Slack
  - [ ] continuous integration vs continuous deployment (CI/CD)
+ - [ ] Profiling
+ - [ ] Compiling
