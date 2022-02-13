@@ -123,6 +123,8 @@ http://www.ritholtz.com
 - `cp`, `touch`, `mkdir`, `ls`, `uniq`, `awk`, `rm`
 - `man man`
 - brew
+- `wget`
+- `curl`
 
 ###### References:
 https://missing.csail.mit.edu/2020/shell-tools/
