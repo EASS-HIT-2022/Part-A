@@ -2,8 +2,8 @@
 
 Topics for the semester:
 
- - [ ] Technical debt
- - [ ] Business logic
+ - [x] Technical debt
+ - [x] Business logic
  - [ ] Types of HW
  - [ ] Bash and commandline (see [missing semester](https://missing.csail.mit.edu/2020/course-shell/))
  - [ ] AWS and cloud fundamentals  
