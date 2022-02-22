@@ -233,7 +233,7 @@ Code coverage – creating tests to satisfy some criteria of code coverage (e.g.
 
 # Ideas for porjects next semester (based on skills we will learn this semester)
 1. AI/ML based predictive system
-2. Smart contractor
+2. Smart contracts (web3)
 3. Any other system with at least 3 microservices
 
 
