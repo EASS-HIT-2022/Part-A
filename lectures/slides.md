@@ -353,8 +353,21 @@ https://training.play-with-docker.com/alacart/
 
 https://towardsdatascience.com/twenty-one-techniques-and-five-concepts-for-better-docker-usage-9ee135dccdc9
 
+# Advanced "Setting up a reverse proxy server" (How Docker makes our life easier)
 
-# Docker nginx walkthrough an offical tutorial together
+"A very common scenario for developers, is to run their server behind a reverse proxy that sits in front of web servers and forwards client/frontend (e.g., web browser) requests to the web servers ("backend"). There are many reasons why you would want to do this but one of the main reasons is to run your API server on a different network or IP then your front-end application is on. You can then secure this network and only allow traffic from the reverse proxy server. For the sake of simplicity and space, I’ve created a simple frontend application in React.js and a simple backend API written in Node.js. Run the following command to pull the code from GitHub."
+
+
+## Without docker this is not easy to do.
+Soon we will see how Docker simplifies the process of building a server that run a reverse proxy
+
+
+## Go through (reverse proxy, react, nginx):
+
+https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/
+
+
+# Using Docker nginx walkthrough an offical tutorial together
 ## https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/
 
 1. `docker run -it --rm -d -p 8080:80 --name web nginx`
@@ -369,12 +382,112 @@ COPY ./index.html /usr/share/nginx/html/index.html
 ```
 7. `docker run -it --rm -d -p 8080:80 --name web webserver`
 
-# Advanced "Setting up a reverse proxy server"
-"A very common scenario for developers, is to run their REST APIs behind a reverse proxy. There are many reasons why you would want to do this but one of the main reasons is to run your API server on a different network or IP then your front-end application is on. You can then secure this network and only allow traffic from the reverse proxy server. For the sake of simplicity and space, I’ve created a simple frontend application in React.js and a simple backend API written in Node.js. Run the following command to pull the code from GitHub."
 
-Go through (reverse proxy, react, nginx):
-https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/
 
+# How microservices talk to each other
+
+## What is API?
+API stands for Application Programming Interface. This interface allows users to build upon another application's functionality.
+
+## What is web API?
+Web API is when other SW services uses other application's/service's functionbality over the web/network.
+
+## What is HTTP?
+HTTP stands for Hypertext Transfer Protocol: an application layer protocol in the Internet protocol suite model for distributed, collaborative, hypermedia information systems.
+- http://facebook.com
+- https://facebook.com
+
+
+# How microservices talk to each other
+
+## GET method
+```
+GET /microservice/v1/function?param1=value1&param=value2
+```
+
+## POST method
+```
+POST /microservice/v1/function HTTP/1.1
+Host: localhost
+
+param1=value1&param=value2
+```
+
+# How do we perform HTTP requests (postman and cli)
+
+1. Postman
+https://web.postman.co/home
+
+2. `curl` or `wget` in the command line
+
+# How do we perform HTTP requests (python)
+
+3. `requests` library in python:
+```
+>> r = requests.get('https://api.github.com/user', auth=('user', 'pass'))
+>> r.status_code
+200
+>> r.headers['content-type']
+'application/json; charset=utf8'
+>> r.encoding
+'utf-8'
+>> r.text
+'{"type":"User"...'
+>> r.json()
+{'private_gists': 419, 'total_private_repos': 77, ...}
+```
+
+4. `httpx` library in python
+https://www.python-httpx.org/quickstart/
+
+
+# Demo performing HTTP reqeusts `httpx` vs. `curl`
+
+1. Perform GET https://httpbin.org/get
+
+2. Perform POST `https://httpbin.org/post` with `data={'key': 'value'}`
+
+* Note that POST/GET could be "overloaded" (have the same endpoint)
+
+
+# How microservices talk to each other
+## What is a REST API?
+"When a client request is made via a RESTful API, it transfers a representation of the state of the resource to the requester or endpoint. This information, or representation, is delivered in one of several formats via HTTP: JSON (Javascript Object Notation), HTML, XLT, Python, PHP, or plain text. JSON is the most generally popular file format to use because, despite its name, it’s language-agnostic, as well as readable by both humans and machines"
+
+#### Read more about REST and HTTP
+
+https://www.redhat.com/en/topics/api/what-is-a-rest-api
+
+https://www.educative.io/blog/what-are-rest-apis
+
+
+# In class hands-on session (training for Ex1)
+**Please complete due next class (March 7th, 2022) and use Discord for help**
+
+1. Create a remote git repo on our organization GitHub https://github.com/EASS-HIT-2022/ (private/public)
+
+2. Name the repo `http-api-demo-<your github name>`
+
+3. Include a README, Dockerfile, client.py files
+
+4. In client.py include at least two POST/GET requests from httpbin demo HTTP API (http://httpbin.org/):
+- POST to any endpoint of your choice (e.g., http://httpbin.org/post)
+- GET to any endpoint of your choice (e.g., http://httpbin.org/get)
+
+5. Make a Dockerfile that execute client.py on startup and prints the status and output from the http requests it performs from step 3. Helpful snippet:
+```
+FROM ubuntu
+RUN  apt-get update
+RUN  apt-get -y install python
+CMD ["echo", "Hello, EASS 2022"]
+```
+
+6. Now, create a second Dockerfile in your git repo `localhost.Dockerfile` which call to the local hosted httpbin and call it via http://localhost:
+`docker run -p 80:80 kennethreitz/httpbin`
+7. build the second docker image. Useful command:
+```
+docker build -t tab ./ -f localhost.Dockerfile
+```
 
 # Good luck to all of us
 
