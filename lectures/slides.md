@@ -384,6 +384,54 @@ COPY ./index.html /usr/share/nginx/html/index.html
 
 
 
+# Recap - linux commands everyone should know
+
+## host/network commands
+ - `ip`
+ - `ifconfig`
+ - `hostname`
+ - `whoami`
+ - `uname`
+ - `ping`
+
+## file-realted commands
+ - `mkdir` `rmdir` `cp` `mv`, `rm`
+ - `cd` `ls -l`
+ - `find`
+ - `wc`
+ - `xxd`
+ - `du -h /`
+ - `chown` `chmod`
+
+## archives:
+- `zip`, `tar` `gzip`, `unzip`, `gunzip`
+- `tar -czvf name-of-archive.tar.gz /path/to/dir-or-file` 
+  
+  `c` - create, `v` verbose, `f` - allow to chose the name
+
+
+# Recap - linux commands everyone should know
+
+## more commands
+- `cat` `touch` `echo`
+- `locate` `whereis` `which` `find`
+- `grep`
+- `df` `du`
+- `awk` `head` `tail`
+- `diff`
+- `jobs` (to see background jobs `command&`)
+- `kill` (sending signals to processes)
+
+`SIGTERM (15)` -- requests the job to stop
+
+`SIGKILL (9)` -- forces programs to stop
+
+- `wget` `curl`
+- `top`, `htop`, `brew` (should be installed), `apt-install`
+
+
+
+
 # How microservices talk to each other
 
 ## What is API?
@@ -450,6 +498,7 @@ https://www.python-httpx.org/quickstart/
 * Note that POST/GET could be "overloaded" (have the same endpoint)
 
 
+
 # How microservices talk to each other
 ## What is a REST API?
 "When a client request is made via a RESTful API, it transfers a representation of the state of the resource to the requester or endpoint. This information, or representation, is delivered in one of several formats via HTTP: JSON (Javascript Object Notation), HTML, XLT, Python, PHP, or plain text. JSON is the most generally popular file format to use because, despite its name, it’s language-agnostic, as well as readable by both humans and machines"
@@ -489,6 +538,71 @@ CMD ["echo", "Hello, EASS 2022"]
 docker build -t tab ./ -f localhost.Dockerfile
 ```
 
+# Hello World, FastAPI
+
+## Install
+1. `pip install fastapi`
+2. `pip install "uvicorn[standard]"`
+Uvicorn is an ASGI (Asynchronous Server Gateway Interface) web server implementation for Python
+
+## code of the server (`main.py`)
+
+```
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def get_root():
+    return {"message": "Hello World", "method": "GET"}
+
+@app.post("/")
+async def post_root():
+    return {"message": "Hello World", "method": "POST"}
+```
+
+# Hello World, FastAPI
+## Running the server
+
+```
+uvicorn main:app --reload
+```
+
+## read more
+
+https://fastapi.tiangolo.com/tutorial/
+
+# Ex 1 (Due April 10, 2022)
+
+1. Build only the backend (using FastAPI)
+2. Include a Dockerfile, README and the source code of the app
+3. Be OOP-friendly (recall the SOLID principle) and use `pydantic`
+4. Include both integartion and unit tests inside using `pytest`, `httpx`, or `pip install docker` (you may use some bash scripting as well). The idea is to be robust, simple and test the whole system wisely and efficently.
+
+Suggested layout of the repo:
+
+```
+.
+|- app
+|             |- main.py
+|             |- unit_tests.py
+|             |- requirements.txt
+|
+|- integration_test.py
+|- Dockerfile
+|- README.md
+```
+
+## List of ideas ideas for projects
+- Building the backend of a voting app 
+- Personal wallet (keep expenses, images)
+- Weather application
+- The backend of a US/IL stock viewer analyzer webapp
+- The backend of a twitter summarizer webapp (focus on one field e.g., stock symbols)
+
+
+
 # Good luck to all of us
 
 :::::::::::::: {.columns}
@@ -506,3 +620,4 @@ Be active on EASS discord and try to learn and help each other as much as you ca
 https://docs.microsoft.com/en-us/visualstudio/docker/tutorials/docker-tutorial
 https://github.com/docker/awesome-compose/tree/master/fastapi
 https://luminousmen.com/post/what-are-the-best-engineering-principles
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Concepts
