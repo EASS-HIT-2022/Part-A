@@ -547,7 +547,7 @@ Uvicorn is an ASGI (Asynchronous Server Gateway Interface) web server implementa
 
 ## code of the server (`main.py`)
 
-```
+```python
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -601,6 +601,212 @@ Suggested layout of the repo:
 - The backend of a US/IL stock viewer analyzer webapp
 - The backend of a twitter summarizer webapp (focus on one field e.g., stock symbols)
 
+# Handling Data/Models over the wire
+We want to send data (JSONs) over the wire, but in the code we would like to work with objects.
+
+- DTO (Data Transfer Object)
+
+- ORM (Object Relational Mapping)
+
+- MVC (Model View Controller)
+
+# The MVC design pattern (mostly related to UI)
+
+- Model
+The model manages the data, logic and rules of the application.
+- View
+Any representation of information such as a chart, diagram or table.
+- Controller
+Accepts input and converts it to commands for the model or view.
+
+![](https://developer.mozilla.org/en-US/docs/Glossary/MVC/model-view-controller-light-blue.png){ width=200px }
+
+
+ref (Mozilla is great for web resources)
+https://developer.mozilla.org/en-US/docs/Glossary/MVC/model-view-controller-light-blue.png
+
+
+# Pydantic 
+`pydantic` helps us to define what type of JSONs are valid and what are their interperation. With Pydantic's Model classes we can define the input/outputs of each API endpoint. It helps fastapi with validation, serialization, and documentation.
+
+1. Between microservices (`request` vs. `response`)
+2. Between Databases microservices
+3. Or between any two entities or the user and the application
+
+```python
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name = 'Jane Doe'
+```
+
+# Pydantic
+```python
+from pydantic import BaseModel
+
+class Client(BaseModel):
+    id: int
+    balance: float
+
+class Transaction(BaseModel):
+    from_client: Client
+    to_client: Client
+    amount: float
+
+class Request(BaseModel):
+    id: int
+    transaction: Transaction
+
+class Response(Request):
+    approved: bool
+    executed: bool
+```
+
+# Accesing the data
+```python
+@app.post("/v1/handle")
+def handle(req: Request):
+  if req.from_client.balance > req.transaction.amount:
+    pass # do something
+  
+  res = Response()
+
+  res.id = req.id
+  return res
+```
+
+# Using dataclasses, understanding what's pydantic is doing
+```python
+from pydantic.dataclasses import dataclass
+import json
+
+@dataclass
+class User:
+  id: int
+  name: str
+
+user = User(id=123, name="James")
+d = asdict(user)  # {'id': 123, 'name': 'James'
+user_json = json.dumps(d)
+print(user_json)  # '{"id": 123, "name": "James"}'
+
+# Or directly with pydantic_encoder
+json.dumps(user, default=pydantic_encoder)
+
+json_raw = '{"id": 123, "name": "James"}'
+user_dict = json.loads(json_raw)
+user = User(**user_dict)
+
+user = User.__pydantic_model__.parse_raw('{"id": 123, "name": "James"}')
+print(user)
+```
+
+### ref:
+https://stackoverflow.com/questions/67621046/initializing-a-pydantic-dataclass-from-json
+
+# How to design a project ()
+- architecture
+- draw.io
+
+![](https://raw.githubusercontent.com/donnemartin/system-design-primer/master/images/jrUBAF7.png){width=250px}
+
+
+# Step 1: Outline use cases, constraints, and assumptions
+Gather requirements and scope the problem. Ask questions to clarify use cases and constraints. Discuss assumptions.
+
+- Who is going to use it?
+- How are they going to use it?
+- How many users are there?
+- What does the system do?
+- What are the inputs and outputs of the system?
+- How much data do we expect to handle?
+- How many requests per second do we expect?
+- What is the expected read to write ratio?
+
+## ref
+https://github.com/donnemartin/system-design-primer
+
+
+# Step 2: Create a high level design
+
+- Outline a high level design with all important components.
+- Sketch the main components and connections
+- Justify your ideas
+
+How to use draw.io: https://reneelin2019.medium.com/drawing-cloud-architectures-neural-network-diagrams-and-more-with-draw-io-4f7128ee1aea
+
+
+# Step 3: Design core components
+Dive into details for each core component. For example, if you were asked to design a url shortening service, discuss:
+
+- Generating and storing a hash of the full url
+    - MD5 and Base62
+    - Hash collisions
+    - SQL or NoSQL
+    - Database schema
+- Translating a hashed url to the full url
+    - Database lookup
+- API and object-oriented design between the microservices
+
+## ref
+https://github.com/donnemartin/system-design-primer
+
+
+
+# Step 4: Scale the design
+Identify and address bottlenecks, given the constraints. For example, do you need the following to address scalability issues?
+
+- Load balancer
+- Horizontal scaling
+- Caching
+- Database sharding
+- Blue-green deployment to reduce downtime and risk
+- Discuss potential solutions and trade-offs. Everything is a trade-off. Address bottlenecks using principles of scalable system design.
+
+# Tips
+- Use back of the envelope calculations
+- Powers of two table
+```
+Power           Exact Value         Approx Value        Bytes
+---------------------------------------------------------------
+7                             128
+8                             256
+10                           1024   1 thousand           1 KB
+16                         65,536                       64 KB
+20                      1,048,576   1 million            1 MB
+30                  1,073,741,824   1 billion            1 GB
+32                  4,294,967,296                        4 GB
+40              1,099,511,627,776   1 trillion           1 TB
+```
+
+# Tips
+- Latency numbers every programmer should know
+```
+Latency Comparison Numbers
+--------------------------
+L1 cache reference                    0.5 ns
+Branch mispredict                       5 ns
+L2 cache reference                      7 ns   14x L1 cache
+Mutex lock/unlock                      25 ns
+Main memory reference               100   ns   20x L2 cache, 200x L1 cache
+Compress 1K bytes with Zippy           10 us
+Send 1 KB bytes over 1 Gbps network    10 us
+Read 4 KB randomly from SSD*          150 us  ~1GB/sec SSD
+Read 1 MB sequentially from memory    250 us
+Round trip within same datacenter     500 us
+Read 1 MB sequentially from SSD*        1 ms  ~1GB/sec SSD, 4X memory
+HDD seek                               10 ms   20x datacenter roundtrip
+Read 1 MB sequentially from 1 Gbps     10 ms   40x memory, 10X SSD
+Read 1 MB sequentially from HDD        30 ms   120x memory, 30X SSD
+Send packet CA->Israel->CA            200 ms
+```
+
+## ref
+https://github.com/donnemartin/system-design-primer
+
+# How would you implement google search engine (discussion)
+https://softwareengineering.stackexchange.com/questions/38324/how-would-you-implement-google-search
 
 
 # Good luck to all of us
