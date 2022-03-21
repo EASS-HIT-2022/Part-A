@@ -903,6 +903,22 @@ class Foo(object):
   def internal(self, duration):
     time.sleep(duration)
 
+def test_foo(benchmark):
+  benchmark.weave(Foo.internal, lazy=True)
+  f = Foo()
+  f.run()
+```
+
+```bash
+py.test test_file.py
+```
+
+
+# profiling code
+
+```python
+import time
+import pytest
 
 @pytest.mark.benchmark(
   group="group-name",
@@ -923,28 +939,19 @@ def test_my_stuff(benchmark):
   # completed correctly.
   # Note: this code is not measured.
   assert result is None
-
-def test_foo(benchmark):
-  benchmark.weave(Foo.internal, lazy=True)
-  f = Foo()
-  f.run()
 ```
 
-# Pytest with FastAPI
-
 ```bash
-py.test a.py
+py.test test_file.py
 ```
 
 # pytest fastapi
 
-1. `main.py`
-
 ```python
+# content of main.py
 from fastapi import FastAPI
 
 app = FastAPI()
-
 
 @app.get("/")
 async def read_main():
@@ -952,34 +959,38 @@ async def read_main():
 
 ```
 
-
-2. `test_main.py`
-
 ```python
+# content of test_main.py
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 app = FastAPI()
 
-
 @app.get("/")
 async def read_main():
   return {"msg": "Hello World"}
 
-
 client = TestClient(app)
-
 
 def test_read_main():
   response = client.get("/")
   assert response.status_code == 200
   assert response.json() == {"msg": "Hello World"}
-
 ```
 
 #### References
 https://www.fastapitutorial.com/blog/unit-testing-in-fastapi/
 
+
+# Linting/Formatting your source code
+```bash
+pip install black
+```
+![](https://user-images.githubusercontent.com/553010/159364593-f3176dcf-c116-44d3-8df0-c0b61bbb42e6.png){ width=200px }
+
+
+
+https://black.vercel.app/?version=stable
 
 # Python Async IO
 
