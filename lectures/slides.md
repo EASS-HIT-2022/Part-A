@@ -809,6 +809,324 @@ https://github.com/donnemartin/system-design-primer
 https://softwareengineering.stackexchange.com/questions/38324/how-would-you-implement-google-search
 
 
+# Testing and Profiling
+
+
+## Testing
+- SW testing is the process of evaluating and verifying that a software product or application does what it is supposed to do.
+- Integration testing
+- Unit testing
+
+
+## Profiling
+- **Flat profiler** - computes the average call times (callers & callees)
+- **Call-graph profiler** - shows the call times, frequencies of the functions and their call graph
+
+## References
+https://docs.python.org/3/library/profile.html
+
+https://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script
+
+https://medium.com/@alaminopu.me/profiling-your-python-3-code-8c3f695e62da
+
+https://pypi.org/project/pytest-benchmark/
+
+https://www.ibm.com/topics/software-testing
+
+
+# pytest
+
+> Unit tests are written and run by software developers to ensure that a section of an application ("unit") meets its design and behaves as intended.
+
+## installing
+```bash
+pip install pytest
+```
+
+## hello world
+```python
+
+# content of test_sample.py
+def inc(x):
+    return x + 1
+
+def test_pos():
+    assert inc(3) == 5
+
+def test_neg():
+    assert inc(-1) == 0 
+```
+
+## References
+https://realpython.com/pytest-python-testing/
+https://docs.pytest.org/en/7.1.x/
+
+
+# profiling code via testing
+> profiling ("program profiling", "software profiling") is a form of dynamic program analysis that measures, for example, the space (memory) or time complexity of a program, the usage of particular instructions, or the frequency and duration of function calls. Most commonly, profiling information serves to aid program optimization, and more specifically, performance engineering.
+
+```python 
+import cProfile
+
+def fibonnaci(n):
+    if n in [0, 1]:
+        return n
+    else:
+        return fibonnaci(n-1) + fibonnaci(n-2)
+
+if __name__ == '__main__':
+  pr = cProfile.Profile()
+  pr.enable()
+  fibonnaci(100)
+  pr.disable()
+  pr.print_stats()
+```
+
+# profiling code
+
+```bash
+pip install pytest-benchmark
+pip install aspectlib
+```
+
+
+```python
+import time
+import pytest
+class Foo(object):
+  def __init__(self, arg=0.01):
+    self.arg = arg
+
+  def run(self):
+    self.internal(self.arg)
+
+  def internal(self, duration):
+    time.sleep(duration)
+
+
+@pytest.mark.benchmark(
+  group="group-name",
+  min_time=0.1,
+  max_time=0.5,
+  min_rounds=5,
+  timer=time.time,
+  disable_gc=True,
+  warmup=False
+)
+def test_my_stuff(benchmark):
+  @benchmark
+  def result():
+    # Code to be measured
+    return time.sleep(0.001)
+
+  # Extra code, to verify that the run
+  # completed correctly.
+  # Note: this code is not measured.
+  assert result is None
+
+def test_foo(benchmark):
+  benchmark.weave(Foo.internal, lazy=True)
+  f = Foo()
+  f.run()
+```
+
+# Pytest with FastAPI
+
+```bash
+py.test a.py
+```
+
+# pytest fastapi
+
+1. `main.py`
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def read_main():
+  return {"msg": "Hello World"}
+
+```
+
+
+2. `test_main.py`
+
+```python
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
+app = FastAPI()
+
+
+@app.get("/")
+async def read_main():
+  return {"msg": "Hello World"}
+
+
+client = TestClient(app)
+
+
+def test_read_main():
+  response = client.get("/")
+  assert response.status_code == 200
+  assert response.json() == {"msg": "Hello World"}
+
+```
+
+#### References
+https://www.fastapitutorial.com/blog/unit-testing-in-fastapi/
+
+
+# Python Async IO
+
+How does something which feels concurrent uses a single thread and a single CPU?
+
+![](https://user-images.githubusercontent.com/553010/159353779-1cd6f9d7-ba55-4530-9707-2e22558d9a6c.png){ width=200px }
+
+Event loop
+
+![](https://luminousmen.com/media/asynchronous-programming.jpg){ width=200px }
+
+
+#### References 
+https://tenthousandmeters.com/blog/python-behind-the-scenes-12-how-asyncawait-works-in-python/
+
+
+# Multithreading, Processes, Asyncio
+
+```python
+import threading
+import concurrent.futures
+import time
+from tqdm.asyncio import trange, tqdm
+import asyncio
+import numpy as np
+
+
+def run_threading(n_threads=5):
+    threads = []
+    print("Starting...")
+    start = time.time()
+    for i in range(n_threads):
+        thread = threading.Thread(target=print, args=[f"I am thread {i}."])
+        thread.start()
+        threads.append(thread)
+
+    for thread in threads:
+        thread.join()
+    end = time.time()
+    print(f"Time to complete: {end - start}")
+```
+
+# Multithreading, Processes, Asyncio
+
+```python
+import threading
+import concurrent.futures
+import time
+from tqdm.asyncio import trange, tqdm
+import asyncio
+import numpy as np
+
+
+def do_concurrent(n=32):
+    start = 10_000_000
+    print_list = [i for i in range(start, start + n)]
+    print("Starting...")
+    start = time.time()
+    with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
+        futures = {executor.submit(print, i): i for i in print_list}
+    for f in concurrent.futures.as_completed(futures):
+        print(f"done {futures[f]} {f.result()}")
+    end = time.time()
+    print(f"Time to complete: {end - start}")
+```
+
+# Multithreading, Processes, Asyncio
+
+```python
+import threading
+import concurrent.futures
+import time
+from tqdm.asyncio import trange, tqdm
+import asyncio
+import numpy as np
+
+
+async def wait_and_print(t, n):
+    await asyncio.sleep(t)
+    print(f"coroutine {n} slept for {t} seconds")
+
+
+async def do_tqdm_asyncio(n=10):
+    arr = []
+    async for i in trange(n):
+        print(f"asyncio {i}")
+        arr.append(wait_and_print(np.random.randint(1, 5), i))
+    await asyncio.gather(*arr)
+
+if __name__ == "__main__":
+    run_threading(100)
+    do_concurrent(100)
+    asyncio.run(do_tqdm_asyncio(100))
+```
+
+# The core behind asyncio are `select` and `poll` OS syscalls
+```python
+import selectors
+import socket
+
+sel = selectors.DefaultSelector()
+
+def accept(sock, mask):
+    conn, addr = sock.accept()  # Should be ready
+    print('accepted', conn, 'from', addr)
+    conn.setblocking(False)
+    sel.register(conn, selectors.EVENT_READ, read)
+
+def read(conn, mask):
+    data = conn.recv(1000)  # Should be ready
+    if data:
+        print('echoing', repr(data), 'to', conn)
+        conn.send(data)  # Hope it won't block
+    else:
+        print('closing', conn)
+        sel.unregister(conn)
+        conn.close()
+```
+
+# The core behind asyncio are `select` and `poll` OS syscalls
+```python
+import selectors
+import socket
+
+sock = socket.socket()
+sock.bind(('localhost', 1234))
+sock.listen(100)
+sock.setblocking(False)
+sel.register(sock, selectors.EVENT_READ, accept)
+
+while True:
+    events = sel.select()
+    for key, mask in events:
+        callback = key.data
+        callback(key.fileobj, mask)
+```
+
+#### References
+https://docs.python.org/3/library/selectors.html#module-selectors
+
+
+
+# GitHub's copilot by openai demo
+
+![](https://res.cloudinary.com/apideck/image/upload/w_1500,f_auto/v1624987548/catalog/github-copilot/homepage.png){ width=400px }
+
+
 # Good luck to all of us
 
 :::::::::::::: {.columns}
@@ -822,8 +1140,17 @@ Be active on EASS discord and try to learn and help each other as much as you ca
 ::::::::::::::
 
 
-# Triage 
+# Triage
+node.js
+react
 https://docs.microsoft.com/en-us/visualstudio/docker/tutorials/docker-tutorial
 https://github.com/docker/awesome-compose/tree/master/fastapi
 https://luminousmen.com/post/what-are-the-best-engineering-principles
 https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Concepts
+gdb
+profiling
+debugging
+ipdb
+basic security
+https://owasp.org/www-project-top-ten/
+https://owasp.org/Top10/
