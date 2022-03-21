@@ -885,8 +885,8 @@ if __name__ == '__main__':
 # profiling code
 
 ```bash
-pip install pytest-benchmark
-pip install aspectlib
+$ pip install pytest-benchmark
+$ pip install aspectlib
 ```
 
 
@@ -910,7 +910,7 @@ def test_foo(benchmark):
 ```
 
 ```bash
-py.test test_file.py
+$ py.test test_file.py
 ```
 
 
@@ -942,10 +942,10 @@ def test_my_stuff(benchmark):
 ```
 
 ```bash
-py.test test_file.py
+$ py.test test_file.py
 ```
 
-# pytest fastapi
+# pytest fastapi (https://www.fastapitutorial.com/blog/unit-testing-in-fastapi/)
 
 ```python
 # content of main.py
@@ -978,15 +978,12 @@ def test_read_main():
   assert response.json() == {"msg": "Hello World"}
 ```
 
-#### References
-https://www.fastapitutorial.com/blog/unit-testing-in-fastapi/
-
 
 # Linting/Formatting your source code
 ```bash
-pip install black
+$ pip install black
 ```
-![](https://user-images.githubusercontent.com/553010/159364593-f3176dcf-c116-44d3-8df0-c0b61bbb42e6.png){ width=200px }
+![](https://user-images.githubusercontent.com/553010/159364593-f3176dcf-c116-44d3-8df0-c0b61bbb42e6.png){ width=420px }
 
 
 
