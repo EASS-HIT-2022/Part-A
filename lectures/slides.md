@@ -705,7 +705,7 @@ print(user)
 ### ref:
 https://stackoverflow.com/questions/67621046/initializing-a-pydantic-dataclass-from-json
 
-# How to design a project ()
+# How to design a project
 - architecture
 - draw.io
 
@@ -760,7 +760,7 @@ Identify and address bottlenecks, given the constraints. For example, do you nee
 - Load balancer
 - Horizontal scaling
 - Caching
-- Database sharding
+- Database sharding (breaking the rows or columns of a large table into multiple smaller tables)
 - Blue-green deployment to reduce downtime and risk
 - Discuss potential solutions and trade-offs. Everything is a trade-off. Address bottlenecks using principles of scalable system design.
 
@@ -989,6 +989,86 @@ $ pip install black
 
 https://black.vercel.app/?version=stable
 
+
+# Midterm survey, touchbase, pep talk, and review
+
+- Survey
+- Touchbase/pep-talk
+- Review of fundamental technical material
+  (recap CLI, docker, Dockerfile, HTTP, GET/POST,
+  `docker exec`, `docker ps`, `docker network`, 
+  how to use vim, visual studio code, git and github,
+  `CMD`, `CP`, `WORKDIR`, `RUN`, execute bash scripts/complex logic inside a dockerfile)
+- Review of SW development principles: early testing, github, README, arch diagram, name the services
+
+
+# Doing same thing in different ways (redis client-server)
+
+```bash
+# running redis DB container
+$ docker run --rm --name redis-container -d redis
+7ea29d853d72749870851cbc677664a3d252aafd2c16f79d7823a7f75167bcf9
+# running the client CLI
+$ docker run -it --name redis-cli --link redis-container:redis --rm redis redis-cli -h red
+is -p 6379
+redis:6379> HELLO
+ 1) "server"
+ 2) "redis"
+ 3) "version"
+ 4) "6.2.6"
+ 5) "proto"
+ 6) (integer) 2
+ 7) "id"
+ 8) (integer) 3
+ 9) "mode"
+10) "standalone"
+11) "role"
+12) "master"
+13) "modules"
+14) (empty array)
+redis:6379> ping
+PONG
+redis:6379> ping [hello]
+"[hello]"
+redis:6379> ping [hello-eass-2022]
+"[hello-eass-2022]"
+redis:6379>
+```
+
+# second way
+```bash
+$ docker run --rm --name redis-container -p1234:6379 -d redis
+6c318087da94fc1b863cd4093affc2a0a773f5dcb42764865e9d8b13e03790db
+$ python
+Python 3.9.5 (default, Jun  4 2021, 12:28:51)
+[GCC 7.5.0] :: Anaconda, Inc. on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import redis; r = redis.Redis(host='localhost', port=1234, db=0); r.set('foo', 'bar')
+True
+>>> r.get('foo')
+b'bar'
+```
+
+# third way
+```bash
+$ docker run --rm --name redis-container -p1234:6379 -d redis
+$ docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 redis-demo-network
+$ docker network connect --ip=172.20.0.1 redis-demo-network redis-container
+$ docker run -it --network redis-demo-network --rm python:3.9 bash
+
+# INSIDE THE CONTIANER
+root@e2a2e4951955:/# pip install redis
+
+# start python cli inside client container
+root@e2a2e4951955:/# python
+>>> import redis; r = redis.Redis(host='172.20.0.1', port=6379, db=0); r.set('foo', 'bar')
+True
+>>> r.get('foo')
+b'bar'
+```
+
+
+
 # Python Async IO
 
 How does something which feels concurrent uses a single thread and a single CPU?
@@ -1129,11 +1209,16 @@ while True:
 https://docs.python.org/3/library/selectors.html#module-selectors
 
 
-
 # GitHub's copilot by openai demo
 
 ![](https://res.cloudinary.com/apideck/image/upload/w_1500,f_auto/v1624987548/catalog/github-copilot/homepage.png){ width=400px }
 
+# Where are we going from now
+- UI: streamlit, javascript, react
+- Docker compose
+- Databases: redis, mongodb, mysql
+- Basic security, authentication
+- Advanced SW concepts: functional programming
 
 # Good luck to all of us
 
@@ -1162,3 +1247,7 @@ ipdb
 basic security
 https://owasp.org/www-project-top-ten/
 https://owasp.org/Top10/
+functional programming
+https://streamlit.io/gallery + httpx
+https://github.com/romanvm/python-web-pdb
+https://codeburst.io/implement-a-production-ready-rest-service-using-fastapi-13f284562c75
