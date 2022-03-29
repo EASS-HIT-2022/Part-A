@@ -1009,7 +1009,8 @@ https://black.vercel.app/?version=stable
 $ docker run --rm --name redis-container -d redis
 7ea29d853d72749870851cbc677664a3d252aafd2c16f79d7823a7f75167bcf9
 # running the client CLI
-$ docker run -it --name redis-cli --link redis-container:redis --rm redis redis-cli -h red
+$ docker run -it --name redis-cli --link redis-container:redis  \ 
+  --rm redis redis-cli -h red
 is -p 6379
 redis:6379> HELLO
  1) "server"
@@ -1043,7 +1044,9 @@ $ python
 Python 3.9.5 (default, Jun  4 2021, 12:28:51)
 [GCC 7.5.0] :: Anaconda, Inc. on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>> import redis; r = redis.Redis(host='localhost', port=1234, db=0); r.set('foo', 'bar')
+>>> import redis
+>>> r = redis.Redis(host='localhost', port=1234, db=0)
+>>> r.set('foo', 'bar')
 True
 >>> r.get('foo')
 b'bar'
@@ -1052,7 +1055,8 @@ b'bar'
 # third way
 ```bash
 $ docker run --rm --name redis-container -p1234:6379 -d redis
-$ docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 redis-demo-network
+$ docker network create --subnet 172.20.0.0/16 \
+  --ip-range 172.20.240.0/20 redis-demo-network
 $ docker network connect --ip=172.20.0.1 redis-demo-network redis-container
 $ docker run -it --network redis-demo-network --rm python:3.9 bash
 
@@ -1061,7 +1065,9 @@ root@e2a2e4951955:/# pip install redis
 
 # start python cli inside client container
 root@e2a2e4951955:/# python
->>> import redis; r = redis.Redis(host='172.20.0.1', port=6379, db=0); r.set('foo', 'bar')
+>>> import redis
+>>>  r = redis.Redis(host='172.20.0.1', port=6379, db=0)
+>>> r.set('foo', 'bar')
 True
 >>> r.get('foo')
 b'bar'
