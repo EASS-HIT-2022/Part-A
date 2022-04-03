@@ -20,7 +20,7 @@ date: "2022"
 ---
 
 
-# EASS 2022 - Lecture 1
+# EASS 2022
 :::::::::::::: {.columns}
 ::: {.column width="50%"}
 - Admin
@@ -1074,6 +1074,19 @@ b'bar'
 ```
 
 
+# GitHub's copilot by openai demo
+
+![](https://res.cloudinary.com/apideck/image/upload/w_1500,f_auto/v1624987548/catalog/github-copilot/homepage.png){ width=400px }
+
+
+# Where are we going from now
+- UI: streamlit, javascript, react
+- Docker compose
+- Databases: redis, mongodb, mysql
+- Basic security, authentication
+- Advanced SW concepts: functional programming
+
+
 
 # Python Async IO
 
@@ -1215,16 +1228,1437 @@ while True:
 https://docs.python.org/3/library/selectors.html#module-selectors
 
 
-# GitHub's copilot by openai demo
+# Classes in python
+What is a Class?
+A class is simply a template for creating objects. Objects are an encapsulation of data (variables) and functionality (methods). A class defines the kind of object that will be created. For example, we can use thebuilt-in list type as a class to create lists of various types:
 
-![](https://res.cloudinary.com/apideck/image/upload/w_1500,f_auto/v1624987548/catalog/github-copilot/homepage.png){ width=400px }
+```python
+>>> lst = list()    # Create an empty list object
+>>> lst = list([1,2,3])  # Create a list with initial values
+```
+In both cases above, we are creating objects of type "list". The first line creates an empty list while the second line creates a list with initial values 1, 2, 3. We can also create our own customized classes to create various objects as we will see in later sections.
 
-# Where are we going from now
-- UI: streamlit, javascript, react
-- Docker compose
-- Databases: redis, mongodb, mysql
-- Basic security, authentication
-- Advanced SW concepts: functional programming
+# Creating Classes
+In Python, a class is created by the keyword:`class` followed by the name of the class. The following code creates a simpleclass named `MyClass`:
+
+```python
+class MyClass:      # Define MyClass 
+    pass            # Pass means do nothing for now 
+
+                    # We'll add features later 
+```
+
+# Creating Instances/Objects from Classes
+An instance is an object that contains all the variables and methods defined by itsclass. Tocreate an instance from a class, we simply use theclass name followed by parenthesis (). For example:
+
+```python
+ my_instance = MyClass()       # Create an instance of MyClass 
+
+                             # This calls MyClass __init__ method 
+
+ print(my_instance)          # Print memory address of my_instance 
+
+                             # __repr__ method is called automatically
+
+```
+
+
+# Python OOP
+
+Python is an object-oriented language. This means that everything in Python is an object, and objects can interact with each other. Classes are a way of grouping together similar objects. For example, you could have a class of animals, which contains individual animals like lions, tigers, and bears. Each animal would have its own set of attributes (like size, weight, and fur color) and methods (like how to hunt or what to eat). OOP lets you structure your code in a way that makes it easy to reuse and extend. So if you wanted to create a new type of animal, you could just create a new class that inherits from the original animal class. This would give the new animal all the same attributes and methods as the original, but you could also add new ones or override existing ones.
+
+# Python OOP
+
+Here's a simple example of a class:
+
+```python
+class Animal:
+    def __init__(self, name, weight):
+        self.name = name
+        self.weight = weight
+
+    def eat(self):
+        print("%s is eating." % self.name)
+
+    def make_sound(self):
+        print("%s is making a sound." % self.name)
+
+class Dog(Animal):
+    def __init__(self, size)
+      self._size = size
+      super().__init__(name, weight)
+
+    def make_sound(self):
+        print("Barking")
+```
+
+
+# Encoding binary data (meaning encoding anything)
+
+Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format by translating it into a base-64 representation. This conversion allows for easy transport of binary data through systems that only support safe text characters.
+
+Python provides a base64 encoding module that can be used to encode and decode Base64 strings.
+
+```python
+>>> import base64
+>>> encoded_string = base64.b64encode(b'binary\x00string')
+'YmluYXJ5AHN0cmluZw=='
+>>> decoded_bytes = base64.b64decode(encoded_string)
+b'binary\x00string'
+```
+
+# General idea, example of image
+
+To encode an image using base64, the image file must first be read into a bytestring.
+
+```python
+with open('image.png', 'rb') as f:
+    data = f.read()
+```
+
+Next, the `base64.b64encode()` function can be used to encode the bytestring:
+
+```python
+encoded_data = base64.b64encode(data)
+```
+To decode the encoded string, the `base64.b64decode()` function can be used:
+
+```python
+decoded_data = base64.b64decode(encoded_data)
+```
+Finally, the decoded data can be written back to an image file using the `open()` function:
+
+```python
+with open('image_copy.png', 'wb') as f:  # note the 'wb' mode!
+    f.write(decoded_data)
+```
+
+# Using `FileResponse`
+
+```python
+from fastapi.responses import FileResponse
+u="https://upload.wikimedia.org/wikipedia/en/2/2c/Holon_Institute_of_Technology_logo.jpg"
+@app.get("/v1/get-hit-image")
+async def main():
+    return FileResponse(u)
+```
+
+# binary/images using `base64` (better option with `BytesIO`)
+
+```bash
+$ pip install imageio
+```
+
+```python
+import imageio as iio
+import io, base64
+u="https://upload.wikimedia.org/wikipedia/en/2/2c/Holon_Institute_of_Technology_logo.jpg"
+
+image = iio.imread(u)
+byte_stream = io.BytesIO()
+arr = iio.v3.imwrite(byte_stream, image, plugin="pillow", format="PNG")
+encoded = base64.b64encode(output.getbuffer().tobytes())
+output.getbuffer().tobytes() == base64.b64decode(encoded)
+```
+
+# May try with local images as well
+
+```python
+import base64
+import io
+from imageio import imread
+import matplotlib.pyplot as plt
+
+filename = "yourfile.jpg"
+with open(filename, "rb") as fid:
+    data = fid.read()
+
+b64_bytes = base64.b64encode(data)
+b64_string = b64_bytes.decode()
+
+# reconstruct image as an numpy array
+img = imread(io.BytesIO(base64.b64decode(b64_string)))
+
+# show image
+plt.figure()
+plt.imshow(img, cmap="gray")
+plt.show()
+```
+
+
+# Advanced concepts in python
+
+Advanced concepts in Python can include anything from functional programming to working with databases. In this tutorial, we'll focus on a few key
+advanced concepts that are particularly useful in Python programming. First, let's talk about decorators. Decorators are a way to "wrap" a function
+so that it behaves differently than it would without the decorator. For example, you might use a decorator to log every time a function is called, or to cache the results of a function so that future calls are faster. Next, we'll talk about generators. Generators are a type of iterator that allows you to write code that lazily generates values, instead of having to compute all the values at once. This can be useful for working with large data sets where you don't want to hold everything in memory at once.
+
+Finally, we'll talk about context managers. Context managers allow you to specify what should happen when you enter and exit a particular block of code (for example, opening and closing a file). This can be handy for making sure your code Cleanup up after itself, or for ensuring that resources are always properly released.
+
+# Decorators
+ecorators in Python
+
+Python decorators are a powerful tool for modifying functions and classes. Decorators can be used to add or remove functionality from a function or class, making them ideal for customizing code without having to modify the underlying code itself.
+
+In Python, decorators are typically defined as functions that take a single argument (the object to be decorated) and return the modified object. For example, here is a simple decorator that adds logging to a function:
+
+```python
+def log_function(func):
+   def wrapper(*args, **kwargs):
+       print('Calling {0} with args {1} and kwargs {2}'
+            .format(func.__name__, args, kwargs))
+       return func(*args, **kwargs)
+   return wrapper
+
+
+@log_function  #this is how you would "decorate" a function with the log_function decorator
+def some_function(arg1, arg2):  #some_function is now a wrapped function with logging capabilities
+    print('Inside some_function')
+
+
+some_function(1, 2)  #Will print: "Calling some_function with args (1, 2) and kwargs {}" followed by "Inside some_function"
+```
+
+# Decorators can also be applied to classes in a similar way
+```python
+class my_decorator(object):
+  def __init__(self, func):
+    self.func = func
+  def __call__(self, *args):
+    print("before function call")
+    ret = self.func(*args)
+    print("after function call")
+    return ret
+
+
+@my_decorator
+def simple_function():
+  print("inside simple_function")
+
+# equivalent to simple_function = my_decorator(simple_function)
+```
+
+```python
+>>> simple_function()
+before function call
+inside simple_function
+after function call
+```
+
+
+# Generators
+Generators are a special type of function that allow us to create iterators. They're similar to list comprehensions, but they don't actually construct a list; instead, they return an iterator object that can be used to access the values in the sequence one at a time.
+
+```python
+def my_range(start, end):
+    while start < end:
+        yield start
+        start += 1
+
+for i in my_range(0, 5):
+    print(i)
+```
+
+
+# Sqlite inside python3 (not via microservice)
+For our use cases it is better to work with extenral DB microservices with persistent storage (volumes on host via Docker)
+
+```python
+import sqlite3
+conn = sqlite3.connect('mydatabase.db')
+
+# Create a table called "users" with three columns: id, name and email:
+conn.execute('''CREATE TABLE users
+       (id INTEGER PRIMARY KEY AUTOINCREMENT,
+       name TEXT NOT NULL,
+       email TEXT NOT NULL);''')
+
+# Insert two rows of data:
+conn.execute("""INSERT INTO users (name,email) 
+  VALUES ('John', 'john@example.com');""")  
+conn.execute("""INSERT INTO users (name,email) 
+  VALUES ('Mary', 'mary@example.com');""")
+
+# Save the changes and close the connection:
+conn.commit()
+conn.close()
+```
+
+# Retrieving the data from the sqlite DB
+
+```python
+>>> cursor = conn.cursor()
+>>> cursor.execute("select * from users")
+>>> results = cursor.fetchall()
+>>> print(results)
+[(1, 'John', 'john@example.com'), (2, 'Mary', 'mary@example.com')]
+```
+
+# Python modules and packages
+Python packages and modules are a great way to organize your code and share it with others. Packages are collections of modules, and modules are Python files with a .py extension. You can easily create and distribute your own Python packages and modules.
+
+# Creating a Package
+
+To create a package, simply create a directory with the name of your package. Then, inside that directory, create a `__init__.py` file. This file can be empty, but it must exist in order for Python to recognize the directory as a package.
+Now that you have a package, you can start adding modules to it. To add a module to your package, simply create a new Python file with a .py extension and place it inside the package directory.
+
+# Distributing Your Package 
+If you want to share your package with others, you can upload it to the Python Package Index (PyPI). PyPI is the official repository for third-party Python software. Once your package is on PyPI, others can install it using pip, the official tool for installing Python packages:
+
+`pip install YOUR-PACKAGE-NAME`
+
+Writing a Python package is fairly simple. All you need is a directory structure that matches the package name, and `__init__.py` files in each subdirectory. The `__init__.py` files tell Python what modules are in each subpackage, and usually contain initialization code for those modules. Here's an example directory structure for a package named "mypackage":
+
+```bash
+mypackage/ 
+ - __init__.py
+ - module1.py
+ - module2.py
+```
+
+Each `__init__ .py` file contains the following code:
+
+`from module1 import * from module2 import *`
+
+
+# Another example
+
+```python
+# mypackage/
+__init__.py
+a.py
+b.py
+c.py
+
+# mypackage/__init__.py
+from .a import A  # noqa
+from .b import B  # noqa
+from .c import C  # noqa
+
+# a.py
+CONST=123
+```
+
+# Another example
+
+Create a new file called `mymodule.py` in your project directory with the following contents:
+```python
+def greeting(name): 
+  print("Hello, " + name + "!")
+```
+Then, create a new file called "main.py" in the same directory with the following contents:
+
+```python
+import mymodule 
+import mypackage
+mymodule.greeting("World")
+```
+
+# Context manager
+Python Context managers are a way to control the environment in which a piece of code is executed. They are typically used to manage resources such as files or database connections. 
+
+A context manager is a class that defines two special methods, `__enter__()` and `__exit__()`. The code that is wrapped in a with statement is executed within the context of the `__enter__()` method. After the code has been executed, the `__exit__()` method is called to clean up any resources that were used.
+
+Here is a simple example of a context manager:
+
+```python
+class FileManager:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def __enter__(self):
+        self.file = open(self.filename)
+        return self.file
+
+    def __exit__(self, type, value, traceback):
+        self.file.close()
+```
+With this context manager, we can use the with statement to automatically open and close files:
+
+```python
+with FileManager('sample.txt') as f:
+    for line in f:
+        print(line)
+```
+
+
+# Functional programming
+
+Functional programming is a style of programming where we try to make our code more like a mathematical function. That is, we write our code in such a way that it can be easily composed with other code, without worrying about side effects (like mutating data). In Python, we can achieve this by writing our code using higher-order functions and lambdas. Higher-order functions are functions that take other functions as input or return a function as output. Lambdas are anonymous functions that can be passed as arguments to other functions. Say we have a list of numbers and we want to square each number in the list. In imperative style, we would write something like this:
+
+```python
+numbers = [1, 2, 3, 4] 
+squared_numbers = [] 
+for n in numbers: 
+    squared_numbers.append(n**2)
+print(squared_numbers)
+```
+# Functional programming
+
+But notice how much boilerplate code there is just to perform a simple operation! We have to initialize an empty list, loop over the numbers list, and append each squared number to the new list.
+
+In functional style, we can achieve the same thing with much less code:
+
+```python
+numbers = [1, 2, 3, 4]
+squared_numbers = map(lambda x: x**2 , numbers)
+print(list(squared_numbers))
+```
+
+All we're doing here is passing a lambda function (which squares its input) to the map function. The map function applies the lambda function to every element in the input list and returns an iterator over the results. Finally ,we convert the iterator into a list so that we can print it out.
+
+
+# docker-compose (example)
+```bash
+$ mkdir composetest
+$ cd composetest
+```
+
+# docker-compose (example)
+```python
+import time
+
+import redis
+from FastAPI import FastAPI
+
+app = FastAPI()
+cache = redis.Redis(host='redis', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+@app.get('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+```
+
+# docker-compose (example)
+
+```bash
+FROM tiangolo/uvicorn-gunicorn:python3.8
+
+RUN pip install redis
+COPY main.py /app
+```
+
+### ref
+https://docs.docker.com/compose/gettingstarted/
+
+
+# docker-compose (example)
+
+docker-compose.yml
+```yaml
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+  redis:
+    image: "redis:alpine"
+```
+
+```bash
+$ docker-compose build
+$ docker-compose up
+```
+
+
+# docker-compose complex scenario (1/2)
+```yaml
+
+version: "3"
+
+services:
+  python-fastapi:
+    image: tiangolo/uvicorn-gunicorn-fastapi:python3.8
+    restart: on-failure
+    environment:
+      PYTHONPATH: /app
+    working_dir: /app
+    command: uvicorn main:app --host 0.0.0.0 --port 80
+    ports:
+      - 80:80
+  redis:
+    image: redis:6.0.5-alpine
+    restart: always
+    ports:
+      - 6379:6379
+```
+# docker-compose complex scenario (2/2)
+```yaml
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: db
+    ports:
+      - 3306:3306
+  rabbitmq:
+    image: rabbitmq:3.8.2-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+  streamlit:
+    image: streamlit/streamlit:0.58.0
+    command: streamlit run app.py --server.port 80
+    ports:
+      - 80:80
+```
+
+
+# Javascript
+JavaScript is a programming language that can be used to add interactivity to websites. For example, you can use JavaScript to create drop-down menus, or to display the current date and time. 
+
+In order to use JavaScript on a web page, you must first embed the JavaScript code into the HTML code of the page. This can be done using the `<script>` tag. 
+
+For example, the following code would add a drop-down menu to a web page: 
+
+```html
+<html>
+   <head>
+      <title>Hello World</title>
+      <script>
+         alert("Do not use alerts! It is annoying");
+      </script>
+   </head>
+   <body>
+      <h1>Below is rendered HTML using javascript</h1>
+      <script>
+         document.write("<h2>Hello world</h2>");
+         document.write("<p>This document was last modified on "
+             + document.lastModified + ".</p>");
+      </script>
+   </body>
+</html>
+```
+
+# The era of Node.js and V8 engine by google
+
+- Node.js is a cross-platform, open-source JavaScript runtime environment that allows developers to create server-side and networking applications. 
+- Node.js is a server-side platform built on Google Chrome's JavaScript Engine (V8 Engine). 
+- Node.js was developed by Ryan Dahl in 2009 and its first version was released in 2010. Major new versions of Node.js are released annually.
+- The platform runs on various operating systems.
+- Node.js also provides a rich library of various JavaScript modules
+- The popularity of node.js has grown significantly since its inception in 2009. 
+- The node package manager (`npm`) is now the largest ecosystem of open-source libraries in the world with over than 1,000,000 packages available. 
+- Node.js has also changed how we write JavaScript code. Prior to node, JavaScript was primarily used for client-side scripting within web browsers. 
+- Node's ability to run JavaScript on the server side has helped it to become one of the most popular programming languages in the world with over 10 million users as of 2019 according to Stack Overflow
+
+
+# Atwood’s Law
+Atwood's Law is an observation made by Jeff Atwood in 2007 that has become known as Atwood's Law. The law states that "any application that can be written in JavaScript will eventually be written in JavaScript."
+
+
+# javascript
+
+This tutorial will cover the basics of loops, variables, and data types in JavaScript. We'll also touch on some of the language's core features to give you a better understanding of how it works. By the end of this tutorial, you should have a good basic knowledge of these topics and be able to apply them when programming in JavaScript.
+
+Before we dive in, let's take a look at what looping is and why it's important. Looping is a programming concept that allows you to repeat a block of code multiple times. This can be useful for tasks like iterating over an array or performing an operation on each item in a list. It's also one of the fundamental concepts in programming, so it's important to understand how it works.
+
+There are two types of loops in JavaScript: for loops and while loops. For loops are typically used when you know how many times you want to execute the code block. While loops, on the other hand, will run the code block until a certain condition is met. We'll go over both types of loops in more detail below.
+
+Now that we've covered what looping is and why it's useful, let's take a look at how to write a for loop in JavaScript. For loops consist of three parts: the initialization statement, the condition statement, and the increment statement. The initialization statement is executed once at the beginning of the loop and sets up the initial conditions for iteration. The condition statement is checked before each iteration and determines whether or not to run the code block. The increment statement is executed after each iteration and typically updates the counting variable used in the condition statement.
+
+
+# Javascript Loops 
+
+Here's an example of a for loop that counts from 1 to 10:
+
+```javascript
+> for (var i = 1; i <= 3; i++) { console.log(i); }
+1
+2
+3
+```
+
+Here's an example of awhile loop that counts down from 10 to 1:
+```javascript
+var i = 3;
+while (i > 3) {
+    console.log(i);
+    i--;
+}
+```
+
+
+# "Types" in JS are tricky
+
+```javascript
+> var a = 2
+undefined
+> a
+2
+> a == "2"
+true
+> a == 2
+true
+> a === 2
+true
+> a === "2"
+false
+```
+
+# HTML
+HTML is the standard markup language for creating web pages and web applications. With HTML you can create your own website. This tutorial will teach you the basics of HTML so that you can create your own web pages or web applications.
+
+## What is HTML?
+HTML, HyperText Markup Language, is the standard markup language for creating web pages and web applications. HTML is used to structure the content of a web page. The content can be text, images, links, and other media.
+
+## How do I create an HTML document?
+An HTML document starts with a DOCTYPE declaration. The DOCTYPE declares the type of document and the version of HTML used in the document:
+```html
+<!DOCTYPE html>
+<html>
+...
+</html> 
+```
+# HTML
+
+## All tags in an HTML document must be enclosed in angle brackets (`< >`). Tags are used to tell the browser how to display the content of a web page. Most tags have an opening tag (`<tag>`) and a closing tag (`</tag>`). The closing tag has the same name as the opening tag but with a slash (`/`). For example, there is an opening `<p>` tag for paragraphs and a closing `</p>` tag:
+
+```html
+<p>This is a paragraph.</p><p>This is another paragraph.</p>
+```
+
+## Some tags don't have a closing tag because they don't contain any content. These are called empty elements or void elements. For example, the empty element `<br />` represents a line break:
+
+```html
+This is some text.<br />This is some more text.
+```
+
+# Javaescript
+Javascript is a script programming language that can be used to add interactivity to websites. It is considered a client-side scripting language, meaning the code is written on the client computer and run by the browser rather than on the server. In this tutorial, we will cover some basic concepts of Javascript and how to use it in your webpages.
+
+# Basic Syntax
+
+A Javascript program is made up of one or more statements. Each statement is ended with a semicolon (;). Statements can be written on one line or multiple lines. For example, the following two statements are equivalent:
+```javascript
+statement1; statement2;
+
+statement1;
+
+statement2;
+```
+
+# Data Types in JS
+
+There are two types of data in Javascript: primitives and objects. 
+Primitive data types include numbers, strings, and Boolean values (true or false). Numbers can be integers (whole numbers) or floating point numbers (decimals). Strings are a sequence of characters enclosed in quotes.Boolean values are either true or false. 
+
+```javascript
+ var num1 = 5; // integer 
+ var num2 = 3.14159 // floating point number 
+ var phrase = 'Hello world!'; // string 
+ var flag = true; // boolean value 
+```
+
+# Variables
+
+Before you can use a variable in Javascript, you must declare it using the var keyword followed by the variable name. Variable names must start with a letter, underscore (`_`), or dollar sign (`$`) and can contain letters, numbers, underscores, and dollar signs afterwards.
+
+```javascript
+var x; //declare x 
+x = 5; //assign 5 to x 
+
+var y = 10; //declare and assign
+```
+
+# JavaScript's for-each loops
+
+```javascript
+for (var variable in object) {
+  if (object.hasOwnProperty(variable)) {
+    // do something with variable 
+  }
+}
+````
+
+For each property, the loop will return the name of the property as a string:
+```javascript
+var cars = {car1:"Saab", car2:"Volvo", car3:"BMW"};
+
+for (x in cars) {    //returns "car1", "car2", and "car3" as strings 
+  console.log(cars[x]);              //returns the value of each property 
+}
+```
+
+# Objects 
+Objects are more complex data types that can contain primitive data types as well as other objects. Objects are created using curly braces ({}). Properties are name/value pairs separated by colons (:), and each property is ended with a comma (,) except for the last one. Methods are functions associated with an object.
+```javascript
+var car = {
+    type: 'sedan',
+    color: 'blue',
+    drive: function() {
+        method: console.log('The car is driving');
+    }
+};
+```
+
+# JavaScript Objects (JSONs)
+Objects in JavaScript, just like in most programming languages, are used to store data in key-value pairs. 
+
+In JavaScript, objects can be created using the `Object()` constructor or the object literal syntax. 
+
+The `Object()` constructor creates an object wrapper for a given value. If no value is passed, the new object will be empty. 
+```javascript
+var obj = new Object();
+console.log(obj); // {}
+```
+
+The object literal syntax is used to create objects with pre-defined key-value pairs. 
+```javascript
+var obj = {}; 
+console.log(obj); // {} THIS IS JSON!!!
+```
+You can also use the object literal syntax to create an object with key-value pairs already defined.
+```javascript
+var obj = {name: 'John', age: 30}; 
+console.log(obj); // {name: 'John', age: 30}
+```
+
+# Classes
+```javascript
+class Person {
+
+  name;
+
+  constructor(name) {
+    this.name = name;
+  }
+
+  introduceSelf() {
+    console.log(`Hi! I'm ${this.name}`);
+  }
+
+}
+```
+
+```javascript
+const giles = new Person('Giles');
+
+giles.introduceSelf(); // Hi! I'm Giles
+```
+
+# Classes
+
+```javascript
+class Professor extends Person {
+
+  teaches;
+
+  constructor(name, teaches) {
+    super(name);
+    this.teaches = teaches;
+  }
+
+  introduceSelf() {
+    console.log(`My name is ${this.name}, and I will be your ${this.teaches} professor.`);
+  }
+
+  grade(paper) {
+    const grade = Math.floor(Math.random() * (5 - 1) + 1);
+    console.log(grade);
+  }
+
+}
+```
+
+# ref https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript
+
+
+# Promises
+A promise in JavaScript is an Object that promised to return a value at some point in the future. This is useful when you want to avoid blocking the main thread while waiting for an asynchronous task to complete, such as an HTTP request.
+
+A promise has three states:
+- Pending: The initial state of a promise. The operation hasn't completed yet.
+- Fulfilled: The operation has completed and the promise has a value.
+- Rejected: The operation has failed and the promise has a reason for the failure.
+
+You create a promise by using the new Promise constructor:
+
+```javascript
+var promise = new Promise(function(resolve, reject) {
+  // do something
+
+  if (/* everything turned out fine */){
+    resolve("Stuff worked!");
+  } else {
+    reject(Error("It broke"));   } });
+````
+You use Promises by calling methods on them. The most important method is then, which registers callback functions for when a Promise is resolved or rejected. This returns a new Promise, which allows you to chain Promises together:
+
+```javascript
+promise.then(function(result) {
+    console.log(result); // "Stuff worked!" 
+}, function(err) {
+    console.log(err); // Error: "It broke" 
+});
+```
+
+You can also catch errors in your chains by registering a callback function with catch:
+
+```javascript
+promise.then(function(result) {
+  /* do something with result */ }
+).catch(function(err) {
+  /* handle err */ });
+````
+
+# CSS
+Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in a markup language. A style sheet is a collection of rules that tells a web browser how to display a document written in HTML or XML.
+
+CSS is used to style all HTML tags, including the document's body, headings, paragraphs, and other pieces of text. CSS can also be used to style the display of table elements, grid elements, and images.
+
+Here are some important concepts in CSS:
+
+- Selectors: These are the HTML elements that you want to style.
+- Properties: These are the attributes of an HTML element that you want to change.
+- Values: These are the values that you want to set for the properties of an HTML element.
+
+# CSS
+In order to use CSS, you must first create a stylesheet. A stylesheet is a text file with the extension .css that contains your CSS rules. You can then link this stylesheet to your HTML document using the `<link>` tag.
+
+Once you have created your stylesheet, you can start writing CSS rules. A CSS rule has two parts: a selector and a declaration. 
+
+The selector is the HTML element that you want to style. The declaration consists of two parts: a property and a value. The property is the attribute of the element that you want to change, and the value is what you want to set it to. 
+
+In this example, we will make all paragraphs have red text: 
+```javascript
+p { 
+  color: red; 
+}
+
+body {
+  background: #ffffff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a { 
+  color: #0088cc; 
+  text-decoration: none; 
+} 
+
+a:hover { 
+  text-decoration: underline; 
+}
+
+p { 
+  font-size: 13px; line-height: 1.6em; margin-bottom: 10px;
+}
+```
+
+# JavaScript asynchronous
+
+Asynchronous programming is a programming paradigm that enables program execution to continue even when individual tasks, such as function calls, take longer to complete than expected. When a task is ready to be executed, it is placed in a queue of pending tasks and the program continues to execute the next task. When the task at the front of the queue is completed, it is removed from the queue and its results are returned to the program. Asynchronous programming can be used in both single-threaded and multi-threaded programs. In a single-threaded program, asynchronous programming can provide concurrency by allowing multiple tasks to be executed concurrently. In a multi-threaded program, asynchronous programming can improve performance by avoiding costly thread context switches.
+
+# JavaScript asynchronous Example
+
+Consider a simple example: a function that calculates the sum of two numbers. The function can be expressed as follows:
+```javascript
+function add(x, y) {
+    var result = x + y;
+    return result;
+}
+```
+
+If we call this function with values 2 and 3, the result will be 5:
+
+```javascript
+var result = add(2, 3); // 5
+```
+
+# JavaScript asynchronous Example
+
+Now consider what would happen if one of the numbers was very large (say, 1 million). Calculating the sum would take some time, during which the rest of the program would have to wait. This would not be very efficient.
+
+We can make this example more efficient by expressing it as an asynchronous function:
+```javascript
+function addAsync(x, y, callback) {
+  var result = x + y;
+
+  // Invoke the callback with the result:
+
+  callback(result);
+}
+```
+
+In this version of the function, we pass in a callback function that will be called when the calculation is finished. The callback function takes care of returning the result to us. We can now call our function as follows:
+
+```javascript
+addAsync(2, 3, function(result) {
+    // Do something withthe result here...
+    console.log('The sum is ' + result); 
+  });
+``` 
+
+Calling our asynchronous function looks very similar to calling a regular synchronous function except that we pass in an extra argument -the callback function. When we call an asynchronous function, we don't get back a return value immediately - instead, we get back a promise that indicates that a value will eventually be returned (or an error will eventually be thrown). This promise allows us to write code that doesn't block while waiting for a value to be returned.
+
+
+# Javascript live example online
+
+https://embed.plnkr.co/plunk/8ujYdL1BxZftGoS4Cf14
+
+
+# ReactJS Web-UI
+
+Installing
+
+```bash
+brew install node
+npx create-react-app my-app
+cd my-app
+npm start
+```
+
+# ReactJS example `App.js`
+
+```javascript
+
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputText: "",
+      counter: 0,
+    };
+  }
+
+  handleClick = (event) => {
+    console.log(event.target);
+    const val = event.target.name === "Up" ? 1 : -1;
+    this.setState({
+      counter: this.state.counter + val,
+    });
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      inputText: event.target.value,
+    });
+  };
+
+  handleGet = (event) => {
+    fetch("http://httpbin.org/get")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} alt="Logo" width="10%" />
+          <input type="text" onChange={this.handleChange} value={this.state.inputText} />
+          <p>{this.state.inputText}</p>
+          <button name="Up" onClick={this.handleClick}>
+            Up
+          </button>
+          <p>{this.state.counter}</p>
+          <button name="Down" onClick={this.handleClick}>
+            Down
+          </button>
+          <p>Perform HTTP GET to httpbin</p>
+          <button onClick={this.handleGet}>HTTP get</button>
+        </header>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+# Security concepts
+
+1. Password strength:
+
+The strength of a password is determined by its length, complexity, and uniqueness. To ensure that passwords are strong, web applications should require passwords to be a minimum of eight characters in length and include a mix of uppercase and lowercase letters, numbers, and special characters. Passwords should also not be common words or easily guessed phrases.
+
+2. Encryption:
+
+All data transmitted between the web server and web browser should be encrypted to protect it from being intercepted and read by third parties. Transport Layer Security (TLS) is the most common protocol used for encryption. When TLS is used, a padlock icon will typically appear in the web browser to indicate that the connection is secure.
+
+
+TLS(Transport Layer Security) is a cryptographic protocol that provides communication security over the Internet. It has two main components: a public-key Infrastructure (PKI) to verify the identity of endpoints, and a symmetric-key mechanism to encrypt/decrypt data.
+
+
+# TLS example in python
+```bash
+openssl req -new -x509 -days 365 -nodes -out cert.pem -keyout key.pem
+```
+
+# client.py
+```python
+from socket import create_connection
+from ssl import SSLContext, PROTOCOL_TLS_CLIENT
+
+
+hostname = "HIT.COM"
+ip = "127.0.0.1"
+port = 8443
+context = SSLContext(PROTOCOL_TLS_CLIENT)
+context.load_verify_locations("cert.pem")
+
+with create_connection((ip, port)) as client:
+    with context.wrap_socket(client, server_hostname=hostname) as tls:
+        print(f"Using {tls.version()}\n")
+        tls.sendall(b"PING")
+
+        data = tls.recv(1024)
+        print(f"Server says: {data}")
+```
+
+# server.py
+```python
+from socket import socket, AF_INET, SOCK_STREAM
+from ssl import SSLContext, PROTOCOL_TLS_SERVER
+
+
+ip = "127.0.0.1"
+port = 8443
+context = SSLContext(PROTOCOL_TLS_SERVER)
+context.load_cert_chain("cert.pem", "key.pem")
+
+
+with socket(AF_INET, SOCK_STREAM) as server:
+    server.bind((ip, port))
+    server.listen(1)
+
+    with context.wrap_socket(server, server_side=True) as tls:
+        while True:
+            connection, address = tls.accept()
+            print(f"Connected by {address}\n")
+
+            data = connection.recv(1024)
+            print(f"Client Says: {data}")
+
+            connection.sendall(b"PONG")
+```
+
+# Security concepts
+
+
+3. Authentication:
+
+Users of a web application should be authenticated before being granted access to sensitive information or functionality. There are many different authentication methods that can be used, such as password-based authentication or two-factor authentication using a code generated by an app on a user’s mobile device.
+
+4. Authorization:
+
+After a user has been authenticated, the web application needs to determine what they are authorized to do within the application. This usually involves assigning users to roles with different levels of access, such as Admin, Manager, or User. Once again, there are many different ways that this can be implemented depending on the requirements of the application.
+
+
+# Examples
+There are many ways to secure a web application in node.js. Some common methods are discussed below.
+
+1) Authentication and Authorization:
+
+One of the most important aspects of security is authentication and authorization. Authentication is the process of verifying that a user is who they claim to be, while authorization is the process of verifying that a user has permission to access a particular resource.
+
+There are many different ways to implement authentication and authorization, but one popular approach is to use JSON Web Tokens (JWTs). JWTs are an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.
+
+//Create a new token with the payload //(usually this would be done after authenticating the user) const jwt = require('jsonwebtoken'); const token = jwt.sign({id: 1, username: 'test'}, 'secretkey'); console.log(token); // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0In0.-dnYgba7yv4F_A12KVTHKA 
+//Verify the token against the secret key const jwt = require('jsonwebtoken'); const decoded = jwt.verify(token, 'secretkey'); console.log(decoded); // { id: 1, username: 'test' } 
+//If the token is invalid, an error will be thrown const jwt = require('jsonwebtoken'); try { const decoded = jwt.verify(token, 'secretkey'); } catch (err) { console.error(err); //Invalid token - could not be verified }
+
+ 2) Hashing and Salting:
+ 
+Another important aspect of security is hashing and salting passwords. Hashing is the process of converting a password into a fixed length string of characters that cannot be reversed, while salting is the process of adding random data to the password before it is hashed in order to make it more difficult to crack by brute force methods.
+
+There are many different algorithms that can be used for hashing and salting passwords, but one popular choice is bcrypt. Bcrypt is designed specifically for hashing passwords and includes features like automatically generated salt and support for multiple rounds of hashing, which makes it more resistant to brute force attacks than other algorithms.
+
+//Hash a password with bcrypt const bcrypt = require('bcrypt'); const password = 'password'; bcrypt .hash(password , 10 ) .then((hash) => { console .log(hash ); //$2a$10$/OKd7Yjj4iLHFtEuozmHVeqvbZTKCql3/rbnKnuEr7mrAEdyzsN2 }) ; 
+
+There are many ways to secure a web application written in Node.js. Some common methods include using secure HTTP headers, using a web application firewall (WAF), and encrypting data.
+
+Secure HTTP Headers:
+
+HTTP headers are name-value pairs that are sent in the request and response between the client and server. There are a number of headers that can be used to increase security, including:
+
+X-Content-Type-Options: This header tells the browser not to try to guess the MIME type of the response, which can prevent certain types of attacks.
+
+Strict-Transport-Security: This header tells the browser to only connect to the server using HTTPS, even if someone tries to connect using HTTP.
+
+X-Frame-Options: This header prevents clickjacking attacks by telling the browser not to display content from this site in an iframe.
+
+Content-Security-Policy: This header allows you to specify which sources of content are allowed on your page, which can help mitigate XSS and other types of injection attacks.
+
+Using a WAF:
+
+A web application firewall (WAF) is a piece of software that filters requests coming into your website or application. It can block requests based on a number of different factors, including IP address, cookies, headers, and more. A WAF can be a good way to add an extra layer of protection to your app. 
+
+Encrypting Data:
+
+ encryption is a process of transforming readable data into an unreadable format. The data can be transformed back into its original form using a decryption key . When data is encrypted, it helps protect against eavesdropping and tampering . Tampering is when someone modifies data without permission , while eavesdropping is when someone secretly views data .
+
+
+Adding HTTPS to your Node.js web application is important for two reasons:
+
+1) It ensures that all data passing between your server and clients is encrypted, so that people with malicious intent cannot intercept and read it.
+
+2) It adds an extra layer of security by verifying the identity of your server, so that clients can be sure they are not being redirected to a fake or malicious site.
+
+To add HTTPS to your Node.js web application, you will need to:
+
+1) Get a SSL Certificate. You can either purchase one from a trusted Certificate Authority, or generate a self-signed certificate.
+
+2) Configure your Node.js web server to use the SSL certificate. This will usually involve setting up a virtual host with an SSL port (usually 443).
+
+3) Redirect all HTTP traffic to HTTPS. This can be done using redirect rules in your web server configuration, or by setting up a separate redirector server which sends all HTTP traffic to the HTTPS site.
+
+
+# OWASP Top 10 Security risks in web applications
+1. Injection flaws – accessing and manipulating data entered into web applications through user input, such as via SQL or shell injection.
+Example code snippet: 
+```javascript
+var username = 'admin'; var password = '1234';
+connection.query('SELECT * FROM users WHERE username = ' + username + ' AND password = ' + password, function(err, results) {
+  if (err) { throw err; }
+  // do something with results
+});
+```
+2. Cross-site scripting (XSS) – tricks attackers use to inject malicious scripts into webpages viewed by other users.
+Example code snippet: 
+```javascript
+<script>alert('You have been hacked!');</script>
+```
+
+3. Broken authentication and session management – weak and easily guessed passwords, session ID vulnerabilities, cookies that are either easily guessable or stolen by third-party attackers.
+4. Insufficient logging and monitoring – not tracking application activity or knowing what has happened in the past makes it difficult to determine what is happening on the systems today and makes it more difficult to find and fix issues.
+5. Insecure communications – using outdated or unsalted encryption methods, not verifying SSL/TLS certificates, and not verifying message integrity.
+6. Broken access controls – granting users too much access, misconfigured role-based access controls, lack of least privilege model.
+7. Security misconfiguration – insecure file permissions, revealing sensitive information in error messages, leaving servers and applications publicly exposed without protection.
+8. Unvalidated and untested inputs – feeding unvalidated user input directly into web application functions,such as search results, comments, contact forms, etc., can lead to serious security vulnerabilities .
+9. Insufficient security controls – failing to deploy standard security measures, such as firewalls, intrusion detection/prevention systems, proper access control measures, etc. can leave an organization’s assets wide open to attacks.
+10. Poor software design – insecure coding practices, coding errors that can be exploited for malicious purposes , insecure configuration options ,Race conditions where two threads of execution compete for the same resource .
+
+
+# Authentication:
+
+Node.js provides a module called " passport" which helps you authenticate your users easily. You can use different strategies like Local, Facebook, Twitter etc., depending on your requirement. For example,
+```javascript
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(function(username, password, done) {
+    User.findOne({
+        username: username
+    }, function(err, user) {
+        if (err) {
+            return done(err);
+        }
+        if (!user) {
+            return done(null, false);
+        }
+        if (!user.verifyPassword(password)) {
+            return done(null, false);
+        }
+        return done(null, user);
+    });
+}));
+```
+
+# Authorization:
+
+Once the user is authenticated, you need to check if the user has sufficient permissions to access the requested resource. This can be easily achieved using Node's built-in module "acl". For example,
+
+```javascript
+var acl = require('acl'); // Define roles 
+acl.allow([{
+    roles: ['admin'],
+    allows: [{
+        resources: 'blogs',
+        permissions: '*'
+    }, {
+        resources: 'users',
+        permissions: ['get', 'put', 'delete']
+    }]
+}, {
+    roles: ['editor'],
+    allows: [{
+        resources: 'blogs',
+        permissions: ['post', 'put']
+    }]
+}, {
+    roles: {
+        guest: '*'
+    }
+}]);
+// Check role and permission 
+acl.isAllowed('admin', 'blogs', 'get', function(err, result) {
+    console.log(result);
+}); // output : true
+```
+
+# Python
+
+
+```python
+Example 1: 
+from fastapi import FastAPI, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str = None):
+    return {"item_id": item_id, "q": q}
+
+
+@app.post("/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+
+    if form_data.username != "test" or form_data.password != "test":
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+
+    return {"access_token": "fake-super-secret-access-token", "token_type": "bearer"}
+```
+
+# There are many ways to secure FastAPI endpoints, but some common methods are:
+
+## Basic Authentication:
+
+```python
+
+```
+
+# There are many ways to secure FastAPI endpoints, but some common methods are:
+## Token Based Authentication:
+```python
+from fastapi import FastAPI
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+
+app = FastAPI()
+security = OAuth2PasswordBearer(tokenUrl="/token", scheme_name="Bearer")
+
+
+@app.post("/token")
+async def get_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    if form_data.username == "test" and form_data.password == "test":
+        access_token_expires = timedelta(minutes=10)
+        access_token = create_access_token(
+            subject=form_data.username, expires_delta=access_token_expires
+        )
+        return {"accessToken": access_token}
+
+
+@app.get("/secure")
+@security("Bearer", scopes=["read:users"])
+async def read_users():
+    return [
+        {"id": 1, "name": "Bob"},
+        {"id": 2, "name": "Joe"},
+    ]
+```
+
+# Basic Authentication
+```python
+from fastapi import FastAPI
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
+app = FastAPI()
+security = HTTPBasic()
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username == "trudy" and credentials.password == "secret":
+        return {"item_id": item_id, "message": "Welcome Trudy!"}
+    else:
+        return {"message": "Invalid username or password"}
+```
+
+# OAuth2 and JWT
+JWT (JSON Web Tokens)- It is just a token format. JWT tokens are JSON encoded data structures contains information about issuer, subject (claims), expiration time etc. It is signed for tamper proof and authenticity and it can be encrypted to protect the token information using symmetric or asymmetric approach. JWT is simpler than SAML 1.1/2.0 and supported by all devices and it is more powerful than SWT(Simple Web Token).
+OAuth2 — OAuth2 solve a problem that user wants to access the data using client software like browse based web apps, native mobile apps or desktop apps. OAuth2 is just for authorization, client software can be authorized to access the resources on-behalf of end user using access token.
+
+
+```bash
+$ pip install pyjwt
+```
+
+```python
+>>> import jwt
+>>> encoded_jwt = jwt.encode({"some": "payload"}, "secret", algorithm="HS256")
+>>> print(encoded_jwt)
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzb21lIjoicGF5bG9hZCJ9.Joh1R2dYzkRvDkqv3sygm5YyK8Gi4ShZqbhK2gxcs2U
+>>> jwt.decode(encoded_jwt, "secret", algorithms=["HS256"])
+{'some': 'payload'}
+```
+
+# OAuth2 Authentication
+```python
+from datetime import datetime, timedelta
+
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from pydantic import BaseModel
+
+# to get a string like this run:
+# openssl rand -hex 32
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+
+fake_users_db = {
+    "johndoe": {
+        "username": "johndoe",
+        "full_name": "John Doe",
+        "email": "johndoe@example.com",
+        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+        "disabled": False,
+    }
+}
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+
+class User(BaseModel):
+    username: str
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = None
+
+
+class UserInDB(User):
+    hashed_password: str
+
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+app = FastAPI()
+
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+
+def get_user(db, username: str):
+    if username in db:
+        user_dict = db[username]
+        return UserInDB(**user_dict)
+
+
+def authenticate_user(fake_db, username: str, password: str):
+    user = get_user(fake_db, username)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
+
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    user = get_user(fake_users_db, username=token_data.username)
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+async def get_current_active_user(current_user: User = Depends(get_current_user)):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/users/me/", response_model=User)
+async def read_users_me(current_user: User = Depends(get_current_active_user)):
+    return current_user
+
+
+@app.get("/users/me/items/")
+async def read_own_items(current_user: User = Depends(get_current_active_user)):
+    return [{"item_id": "Foo", "owner": current_user.username}]
+
+```
+
+#### ref
+https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
+
+
 
 # Good luck to all of us
 
