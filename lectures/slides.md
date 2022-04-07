@@ -1284,7 +1284,7 @@ class Animal:
         print("%s is making a sound." % self.name)
 
 class Dog(Animal):
-    def __init__(self, size)
+    def __init__(self, name, weight, size)
       self._size = size
       super().__init__(name, weight)
 
@@ -1356,9 +1356,9 @@ u="https://upload.wikimedia.org/wikipedia/en/2/2c/Holon_Institute_of_Technology_
 
 image = iio.imread(u)
 byte_stream = io.BytesIO()
-arr = iio.v3.imwrite(byte_stream, image, plugin="pillow", format="PNG")
-encoded = base64.b64encode(output.getbuffer().tobytes())
-output.getbuffer().tobytes() == base64.b64decode(encoded)
+iio.v3.imwrite(byte_stream, image, plugin="pillow", format="PNG")
+encoded = base64.b64encode(byte_stream.getbuffer().tobytes())
+byte_stream.getbuffer().tobytes() == base64.b64decode(encoded)
 ```
 
 # May try with local images as well
@@ -1395,7 +1395,7 @@ so that it behaves differently than it would without the decorator. For example,
 Finally, we'll talk about context managers. Context managers allow you to specify what should happen when you enter and exit a particular block of code (for example, opening and closing a file). This can be handy for making sure your code Cleanup up after itself, or for ensuring that resources are always properly released.
 
 # Decorators
-ecorators in Python
+Decorators in Python
 
 Python decorators are a powerful tool for modifying functions and classes. Decorators can be used to add or remove functionality from a function or class, making them ideal for customizing code without having to modify the underlying code itself.
 
@@ -2252,6 +2252,84 @@ with socket(AF_INET, SOCK_STREAM) as server:
 
             connection.sendall(b"PONG")
 ```
+
+
+# login with google OAuth
+```bash
+$ npx create-react-app demo-login-google
+$ npm install --force react-google-login # to make sure react version is compatible
+```
+
+cd demo-login-google
+  npm start
+
+```javascript
+import logo from './logo.svg';
+import './App.css';
+
+import React from 'react';
+import GoogleLogin from 'react-google-login';
+
+function Login() {
+
+  const responseGoogle = (response) => {
+    console.log(response);
+  };
+
+  return (
+
+    <div>
+      <GoogleLogin
+        clientId="973485012429-jdemkanneidu38bp284i1rr0hoi9uojr.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'} />
+      <p>ssssssssssssssssss</p>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+      <Login />
+    </div>
+  );
+}
+
+export default App;
+```
+
+# Using Google OAuth2
+OAuth2 is an open standard for authorization that provides a way for users to grant third-party access to their resources without sharing their passwords. It works by delegating user authentication to the service that hosts the user's account, and authorizing third-party applications to access the user's resources using a standardized method.
+
+1. Go to https://console.developers.google.com/projectcreate and create a project
+2. Create credentials https://console.developers.google.com/apis/credentials
+3. Choose OAuth client ID 
+4. Select Web application type
+
+![](https://user-images.githubusercontent.com/553010/162109175-9c6f48e7-d8b4-4786-9bc4-dfdda513209f.PNG){width=250px}
+![](https://user-images.githubusercontent.com/553010/162109174-6165161c-040d-42e0-a483-68d8b0bdfd21.PNG){width=250px}
+![](https://user-images.githubusercontent.com/553010/162109171-7abba68d-5a04-42d0-ad60-64210869da1c.PNG){width=250px}
+![](https://user-images.githubusercontent.com/553010/162109178-b6c1ea09-f2f7-4f67-b151-b4a89a856527.PNG){width=250px}
+
+https://dev.to/sivaneshs/add-google-login-to-your-react-apps-in-10-mins-4del
+
 
 # Security concepts
 
