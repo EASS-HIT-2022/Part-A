@@ -1517,7 +1517,10 @@ mypackage/
 
 Each `__init__ .py` file contains the following code:
 
-`from module1 import * from module2 import *`
+```python
+from module1 import *
+from module2 import *
+```
 
 
 # Another example
@@ -1605,6 +1608,86 @@ print(list(squared_numbers))
 ```
 
 All we're doing here is passing a lambda function (which squares its input) to the map function. The map function applies the lambda function to every element in the input list and returns an iterator over the results. Finally ,we convert the iterator into a list so that we can print it out.
+
+# Pandas
+
+Pandas is a powerful Python data analysis toolkit. It provides a high-performance DataFrame object that can be used to manipulate and analyze data. Pandas also offers a wide variety of statistical and machine learning algorithms that can be applied to data.
+
+In this tutorial, we will cover the basics of pandas, including how to create a DataFrame, how to select data, and how to apply some basic statistical methods. We will also show how to use pandas to load and save data from various sources.
+
+```python
+import numpy as np
+import pandas as pd
+
+s = pd.Series([1, 3, 5, np.nan, 6, 8])
+
+dates = pd.date_range("20130101", periods=6)
+
+df = pd.DataFrame(np.random.randn(6, 4), index=dates, columns=list("ABCD"))
+
+```
+
+```python
+df = pd.DataFrame(
+    {
+        "A": 1.0,
+        "B": pd.Timestamp("20130102"),
+        "C": pd.Series(1, index=list(range(4)), dtype="float32"),
+        "D": np.array([3] * 4, dtype="int32"),
+        "E": pd.Categorical(["test", "train", "test", "train"]),
+        "F": "foo",
+    }
+)
+
+df2.dtypes
+df2.<TAB>
+```
+
+```python
+df.head()
+df.tail(3)
+df.index
+df.columns
+df.to_numpy()
+df.describe()
+df.T
+df.sort_index(axis=1, ascending=False)
+df.sort_values(by="B")
+df["A"]
+df[0:3]
+df["20130102":"20130104"]
+df.loc[:, ["A", "B"]]
+df.iloc[3]
+df.iloc[[1, 2, 4], [0, 2]]
+df[df["A"] > 0]
+df.mean(1)
+df.apply(np.cumsum)
+```
+
+# Pandas
+```python
+left = pd.DataFrame({"key": ["foo", "foo"], "lval": [1, 2]})
+right = pd.DataFrame({"key": ["foo", "foo"], "rval": [4, 5]})
+
+pd.merge(left, right, on="key")
+
+
+df = pd.DataFrame(
+    {
+        "A": ["foo", "bar", "foo", "bar", "foo", "bar", "foo", "foo"],
+        "B": ["one", "one", "two", "three", "two", "two", "one", "three"],
+        "C": np.random.randn(8),
+        "D": np.random.randn(8),
+    }
+)
+
+df.groupby("A").sum()
+```
+
+### ref
+https://pandas.pydata.org/docs/user_guide/10min.html
+
+
 
 
 # docker-compose (example)
@@ -1828,13 +1911,13 @@ An HTML document starts with a DOCTYPE declaration. The DOCTYPE declares the typ
 ```
 # HTML
 
-## All tags in an HTML document must be enclosed in angle brackets (`< >`). Tags are used to tell the browser how to display the content of a web page. Most tags have an opening tag (`<tag>`) and a closing tag (`</tag>`). The closing tag has the same name as the opening tag but with a slash (`/`). For example, there is an opening `<p>` tag for paragraphs and a closing `</p>` tag:
+All tags in an HTML document must be enclosed in angle brackets (`< >`). Tags are used to tell the browser how to display the content of a web page. Most tags have an opening tag (`<tag>`) and a closing tag (`</tag>`). The closing tag has the same name as the opening tag but with a slash (`/`). For example, there is an opening `<p>` tag for paragraphs and a closing `</p>` tag:
 
 ```html
 <p>This is a paragraph.</p><p>This is another paragraph.</p>
 ```
 
-## Some tags don't have a closing tag because they don't contain any content. These are called empty elements or void elements. For example, the empty element `<br />` represents a line break:
+Some tags don't have a closing tag because they don't contain any content. These are called empty elements or void elements. For example, the empty element `<br />` represents a line break:
 
 ```html
 This is some text.<br />This is some more text.
@@ -1948,9 +2031,9 @@ class Person {
 ```
 
 ```javascript
-const giles = new Person('Giles');
+const john = new Person('John');
 
-giles.introduceSelf(); // Hi! I'm Giles
+john.introduceSelf(); // Hi! I'm John
 ```
 
 # Classes
@@ -1977,7 +2060,7 @@ class Professor extends Person {
 }
 ```
 
-# ref https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript
+### ref https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript
 
 
 # Promises
@@ -1999,6 +2082,9 @@ var promise = new Promise(function(resolve, reject) {
   } else {
     reject(Error("It broke"));   } });
 ````
+
+# Promises
+
 You use Promises by calling methods on them. The most important method is then, which registers callback functions for when a Promise is resolved or rejected. This returns a new Promise, which allows you to chain Promises together:
 
 ```javascript
@@ -2036,6 +2122,7 @@ Once you have created your stylesheet, you can start writing CSS rules. A CSS ru
 
 The selector is the HTML element that you want to style. The declaration consists of two parts: a property and a value. The property is the attribute of the element that you want to change, and the value is what you want to set it to. 
 
+# CSS
 In this example, we will make all paragraphs have red text: 
 ```javascript
 p { 
@@ -2096,6 +2183,8 @@ function addAsync(x, y, callback) {
 }
 ```
 
+# JavaScript asynchronous Example
+
 In this version of the function, we pass in a callback function that will be called when the calculation is finished. The callback function takes care of returning the result to us. We can now call our function as follows:
 
 ```javascript
@@ -2124,7 +2213,7 @@ cd my-app
 npm start
 ```
 
-# ReactJS example `App.js`
+# ReactJS example `App.js` (1/2)
 
 ```javascript
 
@@ -2160,7 +2249,21 @@ class App extends Component {
       .then((response) => response.json())
       .then((data) => console.log(data));
   };
+```
 
+# ReactJS example `App.js` (2/2)
+
+```javascript
+  handleGet = (event) => {
+    fetch("http://httpbin.org/get")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+```
+
+# ReactJS example `App.js` (3/3)
+
+```javascript
   render() {
     return (
       <div className="App">
@@ -2185,6 +2288,147 @@ class App extends Component {
 
 export default App;
 ```
+
+
+# Streamlit
+
+Streamlit is a powerful Python library that allows you to create beautiful interactive web applications with just a few lines of code. In this tutorial, we'll show you how to use Streamlit to build a simple web application that can be used to predict the price of a stock using machine learning.
+
+We'll first need to install Streamlit and all of the dependencies required for this tutorial. You can do so by running the following command in your terminal:
+
+```bash
+$ pip install streamlit pandas numpy scikit-learn alpha-vantage plotly
+```
+
+
+# hello world
+```python
+import streamlit as st
+st.title("Hello, Streamlit!")
+st.write("Here's our first attempt at using Streamlit")
+st.markdown("""
+# Streamlit is **awesome**.
+
+That's why we use it for all our projects.
+""")
+
+st.latex(r'''
+     a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} =
+     \sum_{k=0}^{n-1} ar^k =
+     a \left(\frac{1-r^{n}}{1-r}\right)
+     ''')
+
+```
+### refs
+https://docs.streamlit.io/library/api-reference
+https://streamlit.io/gallery
+
+# Demo
+
+Get API key for stocks
+https://www.alphavantage.co/
+
+
+```python
+import streamlit as st 
+import pandas as pd 
+import numpy as np
+import plotly.figure_factory as ff
+
+import pandas as pd
+from alpha_vantage.timeseries import TimeSeries
+
+# TJNG28SJ5PJN34YX
+ts = TimeSeries(os.environ['ALPHAVANTAGE_API_KEY'], output_format='pandas')
+df, meta_data = ts.get_daily(symbol='TSLA')
+
+st.dataframe(df)
+
+
+fig = ff.create_distplot(df.open.values())
+st.plotly_chart(fig, use_container_width=True)
+
+```
+
+
+
+```bash
+$ streamlit run app.py --server.port 8501
+```
+
+
+
+# Dockerfile streamlit
+
+```bash
+FROM python:3.8
+RUN pip install streamlit
+COPY . /app
+WORKDIR /app
+ENTRYPOINT ["streamlit", "run", "app.py"]
+```
+
+# Testing
+
+## Cypress
+https://www.youtube.com/watch?v=iHou7-TgCpY
+
+
+## Pyppetter
+```bash
+$ pip install pyppeteer
+$ export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+```
+
+
+### install Xserver
+https://stackoverflow.com/a/66645230
+
+
+```python
+import asyncio
+from pyppeteer import launch
+
+
+async def main():
+    browser = await launch(headless=False)
+    page = await browser.newPage()
+    await page.goto("https://google.com")
+    await page.screenshot({"path": "example.png"})
+    await browser.close()
+
+
+asyncio.get_event_loop().run_until_complete(main())
+```
+
+# More examples
+```python
+import asyncio
+from pyppeteer import launch
+
+
+async def main():
+    browser = await launch()
+    page = await browser.newPage()
+
+    await page.goto('https://example.com')
+
+    # J is an alias to querySelector
+    input_el = await page.J('input[type="text"]')
+    await input_el.type("Puppeteer")
+
+    submit_el = await page.J('input[type="submit"]')
+    await submit_el.click()
+
+    assert 'Puppeteer' in (await page.content())
+
+    browser.close()
+
+
+asyncio.get_event_loop().run_until_complete(main())
+```
+
+
 
 # Security concepts
 
@@ -2277,19 +2521,21 @@ function Login() {
   };
 
   return (
-
     <div>
       <GoogleLogin
         clientId="973485012429-jdemkanneidu38bp284i1rr0hoi9uojr.apps.googleusercontent.com"
         buttonText="Login"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
-        cookiePolicy={'single_host_origin'} />
-      <p>ssssssssssssssssss</p>
+        cookiePolicy={'single_host_origin'}
+      />
     </div>
   );
 }
+```
 
+# login with google OAuth
+```javascript
 function App() {
   return (
     <div className="App">
@@ -2323,18 +2569,51 @@ OAuth2 is an open standard for authorization that provides a way for users to gr
 3. Choose OAuth client ID 
 4. Select Web application type
 
+# Using Google OAuth2
+1. Go to https://console.developers.google.com/projectcreate and create a project
+2. Create credentials https://console.developers.google.com/apis/credentials
+3. Choose OAuth client ID 
+4. Select Web application type
+
 ![](https://user-images.githubusercontent.com/553010/162109175-9c6f48e7-d8b4-4786-9bc4-dfdda513209f.PNG){width=250px}
+
+# Using Google OAuth2
+
+1. Go to https://console.developers.google.com/projectcreate and create a project
+2. Create credentials https://console.developers.google.com/apis/credentials
+3. Choose OAuth client ID 
+4. Select Web application type
+
+
 ![](https://user-images.githubusercontent.com/553010/162109174-6165161c-040d-42e0-a483-68d8b0bdfd21.PNG){width=250px}
+
+# Using Google OAuth2
+1. Go to https://console.developers.google.com/projectcreate and create a project
+2. Create credentials https://console.developers.google.com/apis/credentials
+3. Choose OAuth client ID 
+4. Select Web application type
+
+
 ![](https://user-images.githubusercontent.com/553010/162109171-7abba68d-5a04-42d0-ad60-64210869da1c.PNG){width=250px}
+
+# Using Google OAuth2
+
+1. Go to https://console.developers.google.com/projectcreate and create a project
+2. Create credentials https://console.developers.google.com/apis/credentials
+3. Choose OAuth client ID 
+4. Select Web application type
+
+
 ![](https://user-images.githubusercontent.com/553010/162109178-b6c1ea09-f2f7-4f67-b151-b4a89a856527.PNG){width=250px}
 
+### ref
 https://dev.to/sivaneshs/add-google-login-to-your-react-apps-in-10-mins-4del
 
 
 # Security concepts
 
 
-3. Authentication:
+1. Authentication:
 
 Users of a web application should be authenticated before being granted access to sensitive information or functionality. There are many different authentication methods that can be used, such as password-based authentication or two-factor authentication using a code generated by an app on a user’s mobile device.
 
@@ -2420,15 +2699,18 @@ Example code snippet:
 
 3. Broken authentication and session management – weak and easily guessed passwords, session ID vulnerabilities, cookies that are either easily guessable or stolen by third-party attackers.
 4. Insufficient logging and monitoring – not tracking application activity or knowing what has happened in the past makes it difficult to determine what is happening on the systems today and makes it more difficult to find and fix issues.
+
+# OWASP Top 10 Security risks in web applications
+
 5. Insecure communications – using outdated or unsalted encryption methods, not verifying SSL/TLS certificates, and not verifying message integrity.
 6. Broken access controls – granting users too much access, misconfigured role-based access controls, lack of least privilege model.
 7. Security misconfiguration – insecure file permissions, revealing sensitive information in error messages, leaving servers and applications publicly exposed without protection.
 8. Unvalidated and untested inputs – feeding unvalidated user input directly into web application functions,such as search results, comments, contact forms, etc., can lead to serious security vulnerabilities .
 9. Insufficient security controls – failing to deploy standard security measures, such as firewalls, intrusion detection/prevention systems, proper access control measures, etc. can leave an organization’s assets wide open to attacks.
-10. Poor software design – insecure coding practices, coding errors that can be exploited for malicious purposes , insecure configuration options ,Race conditions where two threads of execution compete for the same resource .
+10. Poor software design – insecure coding practices, coding errors that can be exploited for malicious purposes , insecure configuration options ,Race conditions where two threads of execution compete for the same resource.
 
 
-# Authentication:
+# Authentication
 
 Node.js provides a module called " passport" which helps you authenticate your users easily. You can use different strategies like Local, Facebook, Twitter etc., depending on your requirement. For example,
 ```javascript
@@ -2516,14 +2798,78 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 # There are many ways to secure FastAPI endpoints, but some common methods are:
 
-## Basic Authentication:
+## Basic Authentication
 
 ```python
+from fastapi import Depends, FastAPI
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
+app = FastAPI()
+
+security = HTTPBasic()
+
+
+@app.get("/users/me")
+def read_current_user(credentials: HTTPBasicCredentials = Depends(security)):
+    return {"username": credentials.username, "password": credentials.password}
 
 ```
 
-# There are many ways to secure FastAPI endpoints, but some common methods are:
-## Token Based Authentication:
+# Basic Authentication
+```python
+from fastapi import FastAPI
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
+app = FastAPI()
+security = HTTPBasic()
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username == "trudy" and credentials.password == "secret":
+        return {"item_id": item_id, "message": "Welcome Trudy!"}
+    else:
+        return {"message": "Invalid username or password"}
+```
+
+
+
+# Basic Authentication Against Timing Attacks
+
+```python
+import secrets
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
+app = FastAPI()
+security = HTTPBasic()
+
+def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(credentials.username, "user")
+    correct_password = secrets.compare_digest(credentials.password, "pass")
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
+
+@app.get("/users/me")
+def read_current_user(username: str = Depends(get_current_username)):
+    return {"username": username}
+```
+
+### ref
+https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
+
+
+# Token Based Authentication:
 ```python
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -2549,28 +2895,6 @@ async def read_users():
         {"id": 1, "name": "Bob"},
         {"id": 2, "name": "Joe"},
     ]
-```
-
-# Basic Authentication
-```python
-from fastapi import FastAPI
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-
-app = FastAPI()
-security = HTTPBasic()
-
-
-@app.get("/")
-def read_root():
-    return {"message": "Hello World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, credentials: HTTPBasicCredentials = Depends(security)):
-    if credentials.username == "trudy" and credentials.password == "secret":
-        return {"item_id": item_id, "message": "Welcome Trudy!"}
-    else:
-        return {"message": "Invalid username or password"}
 ```
 
 # OAuth2 and JWT
