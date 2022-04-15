@@ -17,3 +17,15 @@ Topics for the semester:
  - [ ] continuous integration vs continuous deployment (CI/CD)
  - [ ] Profiling
  - [ ] Compiling
+
+
+This has a WIP webiste 
+
+```
+mkdocs new .
+vi mkdocs.yml
+# theme:
+#  name: material
+mkdocs serve
+mkdocs gh-deploy --force
+```
