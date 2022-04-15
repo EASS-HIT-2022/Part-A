@@ -5,17 +5,17 @@ Topics for the semester:
  - [x] Technical debt
  - [x] Business logic
  - [x] Types of HW
- - [ ] Bash and commandline (see [missing semester](https://missing.csail.mit.edu/2020/course-shell/))
- - [ ] AWS and cloud fundamentals  
- - [ ] Git, GitHub
- - [ ] HTTP and REST API
- - [ ] Microservices
- - [ ] Docker
+ - [x] Bash and commandline (see [missing semester](https://missing.csail.mit.edu/2020/course-shell/))
+ - [x] AWS and cloud fundamentals  
+ - [x] Git, GitHub
+ - [x] HTTP and REST API
+ - [x] Microservices
+ - [x] Docker
  - [ ] Forntend and Backend
- - [ ] Testing
+ - [x] Testing
  - [ ] Linkedin, Slack
  - [ ] continuous integration vs continuous deployment (CI/CD)
- - [ ] Profiling
+ - [x] Profiling
  - [ ] Compiling
 
 
