@@ -1,5 +1,4 @@
-
-# EASS 2022
+# Lecture 1
 - Admin
 - Technical debt
 - Business logic
