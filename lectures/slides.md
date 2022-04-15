@@ -1627,6 +1627,8 @@ df = pd.DataFrame(np.random.randn(6, 4), index=dates, columns=list("ABCD"))
 
 ```
 
+# Pandas 
+
 ```python
 df = pd.DataFrame(
     {
@@ -1643,6 +1645,7 @@ df2.dtypes
 df2.<TAB>
 ```
 
+# Pandas 
 ```python
 df.head()
 df.tail(3)
@@ -1701,7 +1704,7 @@ $ cd composetest
 import time
 
 import redis
-from FastAPI import FastAPI
+from fastapi import FastAPI
 
 app = FastAPI()
 cache = redis.Redis(host='redis', port=6379)
@@ -1801,6 +1804,235 @@ services:
     ports:
       - 80:80
 ```
+
+
+# Streamlit
+
+Streamlit is a powerful Python library that allows you to create beautiful interactive web applications with just a few lines of code. In this tutorial, we'll show you how to use Streamlit to build a simple web application that can be used to predict the price of a stock using machine learning.
+
+We'll first need to install Streamlit and all of the dependencies required for this tutorial. You can do so by running the following command in your terminal:
+
+
+```bash
+$ pip install streamlit pandas numpy scikit-learn alpha-vantage plotly
+```
+
+
+# hello world
+```python
+import streamlit as st
+st.title("Hello, Streamlit!")
+st.write("Here's our first attempt at using Streamlit")
+st.markdown("""
+# Streamlit is **awesome**.
+
+That's why we use it for all our projects.
+""")
+
+st.latex(r'''
+     a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} =
+     \sum_{k=0}^{n-1} ar^k =
+     a \left(\frac{1-r^{n}}{1-r}\right)
+     ''')
+
+```
+### refs
+https://docs.streamlit.io/library/api-reference
+https://streamlit.io/gallery
+
+
+# Markdown cheat sheet (vscode can render)
+
+1. Write your README.md on GitHub
+2. Format text on your Frontend Streamlit app
+
+https://stackedit.io/
+
+https://www.markdownguide.org/cheat-sheet/
+
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+
+
+# Write a data frame
+
+```python
+import streamlit as st
+import pandas as pd
+
+st.write("Here's our first attempt at using data to create a table:")
+st.write(pd.DataFrame({
+    'first column': [1, 2, 3, 4],
+    'second column': [10, 20, 30, 40]
+}))
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+# Highlighting elements
+```python
+import streamlit as st
+import numpy as np
+import pandas as pd
+
+dataframe = pd.DataFrame(
+    np.random.randn(10, 20),
+    columns=('col %d' % i for i in range(20)))
+
+st.dataframe(dataframe.style.highlight_max(axis=0))
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+# Draw a line chart
+```python
+import streamlit as st
+import numpy as np
+import pandas as pd
+
+dataframe = pd.DataFrame(
+    np.random.randn(10, 20),
+    columns=('col %d' % i for i in range(20)))
+
+st.dataframe(dataframe.style.highlight_max(axis=0))
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+
+# Plot a map
+
+```python
+import streamlit as st
+import numpy as np
+import pandas as pd
+
+map_data = pd.DataFrame(
+    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
+    columns=['lat', 'lon'])
+
+st.map(map_data)
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+
+# Widgets
+
+```python
+import streamlit as st
+x = st.slider('x') # this is the widget
+st.write(x, 'squared is', x * x)
+```
+
+```python
+import streamlit as st
+st.text_input("Your name", key="name")
+
+# You can access the value at any point with:
+st.session_state.name
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+# Layout
+
+```python
+import streamlit as st
+
+# Add a selectbox to the sidebar:
+add_selectbox = st.sidebar.selectbox(
+    'How would you like to be contacted?',
+    ('Email', 'Home phone', 'Mobile phone')
+)
+
+# Add a slider to the sidebar:
+add_slider = st.sidebar.slider(
+    'Select a range of values',
+    0.0, 100.0, (25.0, 75.0)
+)
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+# How would you query your backend?
+
+```python
+import streamlit as st
+import httpx
+
+backend_endpoint = "https://httpbin.org/get"
+r = httpx.get(backend_endpoint)
+
+st.json(r.json())
+```
+
+### ref
+
+https://docs.streamlit.io/library/get-started/main-concepts
+
+
+
+# Demo (Fintech App)
+
+Get API key for stocks
+https://www.alphavantage.co/
+
+
+```python
+import streamlit as st 
+import pandas as pd 
+import numpy as np
+import plotly.figure_factory as ff
+
+import pandas as pd
+from alpha_vantage.timeseries import TimeSeries
+
+# TJNG28SJ5PJN34YX
+ts = TimeSeries(os.environ['ALPHAVANTAGE_API_KEY'], output_format='pandas')
+df, meta_data = ts.get_daily(symbol='TSLA')
+
+st.dataframe(df)
+
+
+fig = ff.create_distplot(df.open.values())
+st.plotly_chart(fig, use_container_width=True)
+
+```
+
+
+```bash
+$ streamlit run app.py --server.port 8501
+```
+
+
+# Dockerfile streamlit
+
+```bash
+FROM python:3.8
+RUN pip install streamlit
+COPY . /app
+WORKDIR /app
+ENTRYPOINT ["streamlit", "run", "app.py"]
+```
+
 
 
 # Javascript
@@ -2287,86 +2519,7 @@ class App extends Component {
 }
 
 export default App;
-```
-
-
-# Streamlit
-
-Streamlit is a powerful Python library that allows you to create beautiful interactive web applications with just a few lines of code. In this tutorial, we'll show you how to use Streamlit to build a simple web application that can be used to predict the price of a stock using machine learning.
-
-We'll first need to install Streamlit and all of the dependencies required for this tutorial. You can do so by running the following command in your terminal:
-
-```bash
-$ pip install streamlit pandas numpy scikit-learn alpha-vantage plotly
-```
-
-
-# hello world
-```python
-import streamlit as st
-st.title("Hello, Streamlit!")
-st.write("Here's our first attempt at using Streamlit")
-st.markdown("""
-# Streamlit is **awesome**.
-
-That's why we use it for all our projects.
-""")
-
-st.latex(r'''
-     a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} =
-     \sum_{k=0}^{n-1} ar^k =
-     a \left(\frac{1-r^{n}}{1-r}\right)
-     ''')
-
-```
-### refs
-https://docs.streamlit.io/library/api-reference
-https://streamlit.io/gallery
-
-# Demo
-
-Get API key for stocks
-https://www.alphavantage.co/
-
-
-```python
-import streamlit as st 
-import pandas as pd 
-import numpy as np
-import plotly.figure_factory as ff
-
-import pandas as pd
-from alpha_vantage.timeseries import TimeSeries
-
-# TJNG28SJ5PJN34YX
-ts = TimeSeries(os.environ['ALPHAVANTAGE_API_KEY'], output_format='pandas')
-df, meta_data = ts.get_daily(symbol='TSLA')
-
-st.dataframe(df)
-
-
-fig = ff.create_distplot(df.open.values())
-st.plotly_chart(fig, use_container_width=True)
-
-```
-
-
-
-```bash
-$ streamlit run app.py --server.port 8501
-```
-
-
-
-# Dockerfile streamlit
-
-```bash
-FROM python:3.8
-RUN pip install streamlit
-COPY . /app
-WORKDIR /app
-ENTRYPOINT ["streamlit", "run", "app.py"]
-```
+``
 
 # Testing
 
