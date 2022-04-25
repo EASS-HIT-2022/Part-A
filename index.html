@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#eass-2022" class="md-skip">
+        <a href="#eass-2022-part-a" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              EASS 2022
+              EASS 2022 Part A
             
           </span>
         </div>
@@ -188,7 +188,7 @@
       
       
       <a href="." class="md-nav__link md-nav__link--active">
-        EASS 2022
+        EASS 2022 Part A
       </a>
       
     </li>
@@ -227,7 +227,7 @@
                 
 
 
-<h1 id="eass-2022">EASS 2022</h1>
+<h1 id="eass-2022-part-a">EASS 2022 Part A</h1>
 <ul>
 <li>Admin</li>
 <li>Technical debt</li>
@@ -236,8 +236,7 @@
 <li>Git, GitHub</li>
 <li>Interactive class</li>
 </ul>
-<!-- ![](static\\review.png){ height=400px } -->
-<p><img alt="" src="static\eass_logo.PNG" />{ width=150px }</p>
+<p><img alt="" src="https://user-images.githubusercontent.com/553010/165045531-9e8e25ad-15ad-4838-9e74-ab34a2815e0c.PNG" />{ width=150px }</p>
 <h1 id="admin-stuff">Admin stuff</h1>
 <ul>
 <li>Discord</li>
@@ -458,11 +457,13 @@ Code coverage – creating tests to satisfy some criteria of code coverage (e.g.
 </li>
 </ul>
 <h1 id="monolithic-vs-microservices">Monolithic vs. Microservices</h1>
-<p>:::::::::::::: {.columns}
-::: {.column width="30%"}
-- Monolithic application is a single unified unit that contains all the logic in one entity</p>
 <ul>
-<li>Microservice architecture breaks the application down into a collection of smaller independent units</li>
+<li>
+<p>Monolithic application is a single unified unit that contains all the logic in one entity</p>
+</li>
+<li>
+<p>Microservice architecture breaks the application down into a collection of smaller independent units</p>
+</li>
 </ul>
 <!-- ![](static\\review.png){ height=400px } -->
 <p><img alt="" src="https://d2m6ke2px6quvq.cloudfront.net/uploads/2020/09/11/cda4db94-ac16-43ba-82c4-53632154afc7.jpg" />{ width=300px }</p>
@@ -1589,6 +1590,37 @@ df.groupby(&quot;A&quot;).sum()
 </code></pre>
 <h3 id="ref_4">ref</h3>
 <p>https://pandas.pydata.org/docs/user_guide/10min.html</p>
+<h1 id="ex-2-due-may-30-2022">Ex 2 (Due May 30, 2022)</h1>
+<ol>
+<li>Dockerfile for Frontend</li>
+<li>Include in README.md how to run the Backend and Frontend so they can communicate over HTTP (make sure they are connected on the same Docker network)</li>
+<li>Short demo with a movie (Windows Key+G on QuickTime)</li>
+</ol>
+<p>Suggested layout of the repo:</p>
+<pre><code>.
+|- app/frontend
+|             |- main.py
+|             |- unit_tests.py
+|             |- requirements.txt
+|             |- Dockerfile
+|- app/backend dir (Ex1)
+|- integration_test.py
+|- README.md
+</code></pre>
+<h1 id="ex-3-due-june-19-2022">Ex 3 (Due June 19, 2022)</h1>
+<ol>
+<li>Docker compose</li>
+<li>At least 3 microservices</li>
+<li>Short demo with a movie (Windows Key+G on QuickTime)</li>
+</ol>
+<p>Suggested layout of the repo:</p>
+<pre><code>.
+|- app/backend dir (Ex1)
+|- app/frontend dir (Ex2)
+|- integration_test.py
+|- docker-compose.yml
+|- README.md
+</code></pre>
 <h1 id="docker-compose-example">docker-compose (example)</h1>
 <pre><code class="language-bash">$ mkdir composetest
 $ cd composetest
@@ -2279,7 +2311,109 @@ asyncio.get_event_loop().run_until_complete(main())
 </ol>
 <p>All data transmitted between the web server and web browser should be encrypted to protect it from being intercepted and read by third parties. Transport Layer Security (TLS) is the most common protocol used for encryption. When TLS is used, a padlock icon will typically appear in the web browser to indicate that the connection is secure.</p>
 <p>TLS(Transport Layer Security) is a cryptographic protocol that provides communication security over the Internet. It has two main components: a public-key Infrastructure (PKI) to verify the identity of endpoints, and a symmetric-key mechanism to encrypt/decrypt data.</p>
+<h1 id="intro-to-encryption">Intro to encryption</h1>
+<p>There are two types of encryption schemes: private-public key encryption and shared key encryption. </p>
+<p>Private-public key encryption, also known as asymmetric key encryption, is a type of encryption where there are two different keys - a public key and a private key. The public key can be known by anyone and is used to encrypt data. The private key is only known by the recipient and is used to decrypt data. </p>
+<p>Shared key encryption, also known as symmetric key encryption, is a type of encryption where there is only one key that is shared between the sender and the recipient. This key is used to both encrypt and decrypt data. </p>
+<h1 id="symmetric-encryption">Symmetric encryption</h1>
+<pre><code class="language-bash">pip install cryptography
+</code></pre>
+<pre><code class="language-python">import os
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+key = os.urandom(32)
+iv = os.urandom(16)
+cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+encryptor = cipher.encryptor()
+ct = encryptor.update(b&quot;a secret message&quot;) + encryptor.finalize()
+decryptor = cipher.decryptor()
+decryptor.update(ct) + decryptor.finalize()
+</code></pre>
+<h1 id="hash-based-message-authentication-codes-hmac">Hash-based message authentication codes (HMAC)</h1>
+<pre><code class="language-python">from cryptography.hazmat.primitives import hashes, hmac
+key = b'test key. Beware! A real key should use os.urandom or TRNG to generate'
+h = hmac.HMAC(key, hashes.SHA256())
+h.update(b&quot;message to hash&quot;)
+signature = h.finalize()
+print(signature)
+</code></pre>
+<p>Verify</p>
+<pre><code class="language-python">h = hmac.HMAC(key, hashes.SHA256())
+h.update(b&quot;message to hash&quot;)
+h_copy = h.copy() # get a copy of `h' to be reused
+h.verify(signature)
+</code></pre>
+<h1 id="private-public-key-rsa">Private-Public key (RSA)</h1>
+<pre><code class="language-python">from cryptography.hazmat.primitives.asymmetric import rsa
+private_key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048,
+)
+public_key = private_key.public_key()
+</code></pre>
+<h1 id="private-public-key-rsa-signing">Private-Public key (RSA) - signing</h1>
+<pre><code class="language-python">from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+message = b&quot;A message I want to sign&quot;
+signature = private_key.sign(
+    message,
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+)
+</code></pre>
+<h1 id="private-public-key-rsa-sign-verify">Private-Public key (RSA) Sign-Verify</h1>
+<p>Sign</p>
+<pre><code class="language-python">from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+message = b&quot;A message I want to sign&quot;
+signature = private_key.sign(
+    message,
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+)
+</code></pre>
+<p>Verify</p>
+<pre><code class="language-python">public_key = private_key.public_key()
+public_key.verify(
+    signature,
+    message,
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+)
+</code></pre>
+<h1 id="private-public-key-rsa-encrypt-decrypt">Private-Public key (RSA) Encrypt-Decrypt</h1>
+<p>Encrypt</p>
+<pre><code class="language-python">message = b&quot;encrypted data&quot;
+ciphertext = public_key.encrypt(
+    message,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+</code></pre>
+<p>Decrypt</p>
+<pre><code class="language-python">plaintext = private_key.decrypt(
+    ciphertext,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+plaintext == message
+</code></pre>
 <h1 id="tls-example-in-python">TLS example in python</h1>
+<p>TLS(Transport Layer Security) is a cryptographic protocol that provides communication security over the Internet. It has two main components: a public-key Infrastructure (PKI) to verify the identity of endpoints, and a symmetric-key mechanism to encrypt/decrypt data.</p>
 <pre><code class="language-bash">openssl req -new -x509 -days 365 -nodes -out cert.pem -keyout key.pem
 </code></pre>
 <h1 id="clientpy">client.py</h1>
@@ -2438,13 +2572,29 @@ export default App;
 <p>1) Authentication and Authorization:</p>
 <p>One of the most important aspects of security is authentication and authorization. Authentication is the process of verifying that a user is who they claim to be, while authorization is the process of verifying that a user has permission to access a particular resource.</p>
 <p>There are many different ways to implement authentication and authorization, but one popular approach is to use JSON Web Tokens (JWTs). JWTs are an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.</p>
-<p>//Create a new token with the payload //(usually this would be done after authenticating the user) const jwt = require('jsonwebtoken'); const token = jwt.sign({id: 1, username: 'test'}, 'secretkey'); console.log(token); // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0In0.-dnYgba7yv4F_A12KVTHKA 
-//Verify the token against the secret key const jwt = require('jsonwebtoken'); const decoded = jwt.verify(token, 'secretkey'); console.log(decoded); // { id: 1, username: 'test' } 
-//If the token is invalid, an error will be thrown const jwt = require('jsonwebtoken'); try { const decoded = jwt.verify(token, 'secretkey'); } catch (err) { console.error(err); //Invalid token - could not be verified }</p>
+<p>JWT is a standard to codify a JSON object in a long dense string without spaces. It is not encrypted, so, anyone could recover the information from the contents.
+But it's signed. So, when you receive a token that you emitted, you can verify that you actually emitted it.</p>
+<h1 id="jwt">JWT</h1>
+<p><code>RS256</code> (RSA Signature with SHA-256) is an asymmetric algorithm, and it uses a public/private key pair: the identity provider has a private (secret) key used to generate the signature, and the consumer of the JWT gets a public key to validate the signature. Since the public key, as opposed to the private key, doesn't need to be kept secured, most identity providers make it easily available for consumers to obtain and use (usually through a metadata URL).</p>
+<p><code>HS256</code> (HMAC with SHA-256), on the other hand, involves a combination of a hashing function and one (secret) key that is shared between the two parties used to generate the hash that will serve as the signature. Since the same key is used both to generate the signature and to validate it, care must be taken to ensure that the key is not compromised.</p>
+<p>Demo: https://jwt.io/
+Video: https://www.youtube.com/watch?v=7Q17ubqLfaM
+Post: https://developer.okta.com/blog/2018/06/20/what-happens-if-your-jwt-is-stolen</p>
+<pre><code class="language-javascript">//Create a new token with the payload //(usually this would be done after authenticating the user) 
+const jwt = require('jsonwebtoken'); const token = jwt.sign({id: 1, username: 'test'}, 'secretkey'); console.log(token); 
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0In0.-dnYgba7yv4F_A12KVTHKA 
+//Verify the token against the secret key 
+const jwt = require('jsonwebtoken'); const decoded = jwt.verify(token, 'secretkey'); console.log(decoded); // { id: 1, username: 'test' } 
+//If the token is invalid, an error will be thrown 
+const jwt = require('jsonwebtoken'); try { const decoded = jwt.verify(token, 'secretkey'); } catch (err) { console.error(err); /*Invalid token - could not be verified */ }
+</code></pre>
+<h1 id="security-concepts_2">Security concepts</h1>
 <p>2) Hashing and Salting:</p>
 <p>Another important aspect of security is hashing and salting passwords. Hashing is the process of converting a password into a fixed length string of characters that cannot be reversed, while salting is the process of adding random data to the password before it is hashed in order to make it more difficult to crack by brute force methods.</p>
 <p>There are many different algorithms that can be used for hashing and salting passwords, but one popular choice is bcrypt. Bcrypt is designed specifically for hashing passwords and includes features like automatically generated salt and support for multiple rounds of hashing, which makes it more resistant to brute force attacks than other algorithms.</p>
-<p>//Hash a password with bcrypt const bcrypt = require('bcrypt'); const password = 'password'; bcrypt .hash(password , 10 ) .then((hash) =&gt; { console .log(hash ); //$2a$10$/OKd7Yjj4iLHFtEuozmHVeqvbZTKCql3/rbnKnuEr7mrAEdyzsN2 }) ; </p>
+<pre><code class="language-javascript">//Hash a password with bcrypt const bcrypt = require('bcrypt'); const password = 'password'; bcrypt .hash(password , 10 ) .then((hash) =&gt; { console .log(hash ); //$2a$10$/OKd7Yjj4iLHFtEuozmHVeqvbZTKCql3/rbnKnuEr7mrAEdyzsN2 }) ; 
+</code></pre>
+<h1 id="security-concepts_3">Security concepts</h1>
 <p>There are many ways to secure a web application written in Node.js. Some common methods include using secure HTTP headers, using a web application firewall (WAF), and encrypting data.</p>
 <p>Secure HTTP Headers:</p>
 <p>HTTP headers are name-value pairs that are sent in the request and response between the client and server. There are a number of headers that can be used to increase security, including:</p>
@@ -2452,10 +2602,12 @@ export default App;
 <p>Strict-Transport-Security: This header tells the browser to only connect to the server using HTTPS, even if someone tries to connect using HTTP.</p>
 <p>X-Frame-Options: This header prevents clickjacking attacks by telling the browser not to display content from this site in an iframe.</p>
 <p>Content-Security-Policy: This header allows you to specify which sources of content are allowed on your page, which can help mitigate XSS and other types of injection attacks.</p>
+<h1 id="security-concepts_4">Security concepts</h1>
 <p>Using a WAF:</p>
 <p>A web application firewall (WAF) is a piece of software that filters requests coming into your website or application. It can block requests based on a number of different factors, including IP address, cookies, headers, and more. A WAF can be a good way to add an extra layer of protection to your app. </p>
 <p>Encrypting Data:</p>
 <p>encryption is a process of transforming readable data into an unreadable format. The data can be transformed back into its original form using a decryption key . When data is encrypted, it helps protect against eavesdropping and tampering . Tampering is when someone modifies data without permission , while eavesdropping is when someone secretly views data .</p>
+<h1 id="security-concepts_5">Security concepts</h1>
 <p>Adding HTTPS to your Node.js web application is important for two reasons:</p>
 <p>1) It ensures that all data passing between your server and clients is encrypted, so that people with malicious intent cannot intercept and read it.</p>
 <p>2) It adds an extra layer of security by verifying the identity of your server, so that clients can be sure they are not being redirected to a fake or malicious site.</p>
@@ -2463,7 +2615,7 @@ export default App;
 <p>1) Get a SSL Certificate. You can either purchase one from a trusted Certificate Authority, or generate a self-signed certificate.</p>
 <p>2) Configure your Node.js web server to use the SSL certificate. This will usually involve setting up a virtual host with an SSL port (usually 443).</p>
 <p>3) Redirect all HTTP traffic to HTTPS. This can be done using redirect rules in your web server configuration, or by setting up a separate redirector server which sends all HTTP traffic to the HTTPS site.</p>
-<h1 id="owasp-top-10-security-risks-in-web-applications">OWASP Top 10 Security risks in web applications</h1>
+<h1 id="owasp-open-web-application-security-project-top-10-security-risks-in-web-applications">OWASP (Open Web Application Security Project)-Top 10 Security risks in web applications</h1>
 <ol>
 <li>Injection flaws – accessing and manipulating data entered into web applications through user input, such as via SQL or shell injection.
 Example code snippet: </li>
@@ -2474,20 +2626,23 @@ connection.query('SELECT * FROM users WHERE username = ' + username + ' AND pass
   // do something with results
 });
 </code></pre>
+<p>Example: http://sqlfiddle.com/#!2/fd8be/1</p>
+<p><code>'' OR 1=1 LIMIT 1</code></p>
 <ol>
 <li>Cross-site scripting (XSS) – tricks attackers use to inject malicious scripts into webpages viewed by other users.
 Example code snippet: </li>
 </ol>
 <pre><code class="language-javascript">&lt;script&gt;alert('You have been hacked!');&lt;/script&gt;
 </code></pre>
+<h1 id="owasp-open-web-application-security-project-top-10-security-risks-in-web-applications_1">OWASP (Open Web Application Security Project)-Top 10 Security risks in web applications</h1>
 <ol>
 <li>Broken authentication and session management – weak and easily guessed passwords, session ID vulnerabilities, cookies that are either easily guessable or stolen by third-party attackers.</li>
 <li>Insufficient logging and monitoring – not tracking application activity or knowing what has happened in the past makes it difficult to determine what is happening on the systems today and makes it more difficult to find and fix issues.</li>
-</ol>
-<h1 id="owasp-top-10-security-risks-in-web-applications_1">OWASP Top 10 Security risks in web applications</h1>
-<ol>
 <li>Insecure communications – using outdated or unsalted encryption methods, not verifying SSL/TLS certificates, and not verifying message integrity.</li>
 <li>Broken access controls – granting users too much access, misconfigured role-based access controls, lack of least privilege model.</li>
+</ol>
+<h1 id="owasp-top-10-security-risks-in-web-applications">OWASP Top 10 Security risks in web applications</h1>
+<ol>
 <li>Security misconfiguration – insecure file permissions, revealing sensitive information in error messages, leaving servers and applications publicly exposed without protection.</li>
 <li>Unvalidated and untested inputs – feeding unvalidated user input directly into web application functions,such as search results, comments, contact forms, etc., can lead to serious security vulnerabilities .</li>
 <li>Insufficient security controls – failing to deploy standard security measures, such as firewalls, intrusion detection/prevention systems, proper access control measures, etc. can leave an organization’s assets wide open to attacks.</li>
@@ -2666,7 +2821,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzb21lIjoicGF5bG9hZCJ9.Joh1R2dYzkRvDkqv3s
 &gt;&gt;&gt; jwt.decode(encoded_jwt, &quot;secret&quot;, algorithms=[&quot;HS256&quot;])
 {'some': 'payload'}
 </code></pre>
-<h1 id="oauth2-authentication">OAuth2 Authentication</h1>
+<h1 id="oauth2-authentication-17">OAuth2 Authentication (1/7)</h1>
 <pre><code class="language-python">from datetime import datetime, timedelta
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -2691,9 +2846,9 @@ fake_users_db = {
         &quot;disabled&quot;: False,
     }
 }
-
-
-class Token(BaseModel):
+</code></pre>
+<h1 id="oauth2-authentication-27">OAuth2 Authentication (2/7)</h1>
+<pre><code class="language-python">class Token(BaseModel):
     access_token: str
     token_type: str
 
@@ -2712,8 +2867,9 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
-
-pwd_context = CryptContext(schemes=[&quot;bcrypt&quot;], deprecated=&quot;auto&quot;)
+</code></pre>
+<h1 id="oauth2-authentication-37">OAuth2 Authentication (3/7)</h1>
+<pre><code class="language-python">pwd_context = CryptContext(schemes=[&quot;bcrypt&quot;], deprecated=&quot;auto&quot;)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=&quot;token&quot;)
 
@@ -2741,9 +2897,9 @@ def authenticate_user(fake_db, username: str, password: str):
     if not verify_password(password, user.hashed_password):
         return False
     return user
-
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+</code></pre>
+<h1 id="oauth2-authentication-47">OAuth2 Authentication (4/7)</h1>
+<pre><code class="language-python">def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -2752,9 +2908,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({&quot;exp&quot;: expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-
-
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+</code></pre>
+<h1 id="oauth2-authentication-57">OAuth2 Authentication (5/7)</h1>
+<pre><code class="language-python">async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=&quot;Could not validate credentials&quot;,
@@ -2772,9 +2928,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
-
-
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
+</code></pre>
+<h1 id="oauth2-authentication-67">OAuth2 Authentication (6/7)</h1>
+<pre><code class="language-python">async def get_current_active_user(current_user: User = Depends(get_current_user)):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail=&quot;Inactive user&quot;)
     return current_user
@@ -2794,8 +2950,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={&quot;sub&quot;: user.username}, expires_delta=access_token_expires
     )
     return {&quot;access_token&quot;: access_token, &quot;token_type&quot;: &quot;bearer&quot;}
-
-
+</code></pre>
+<h1 id="oauth2-authentication-77">OAuth2 Authentication (7/7)</h1>
+<pre><code class="language-python">
 @app.get(&quot;/users/me/&quot;, response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
@@ -2809,14 +2966,8 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 <h4 id="ref_15">ref</h4>
 <p>https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/</p>
 <h1 id="good-luck-to-all-of-us">Good luck to all of us</h1>
-<p>:::::::::::::: {.columns}
-::: {.column width="50%"}
-<img alt="" src="static\eass_logo.PNG" />{ width=150px }</p>
-<p>:::
-::: {.column width="50%"}
-Be active on EASS discord and try to learn and help each other as much as you can.
-:::
-::::::::::::::</p>
+<p><img alt="" src="https://user-images.githubusercontent.com/553010/165045531-9e8e25ad-15ad-4838-9e74-ab34a2815e0c.PNG" />{ width=150px }</p>
+<p>Be active on EASS discord and try to learn and help each other as much as you can.</p>
 <h1 id="triage">Triage</h1>
 <p>node.js
 react
