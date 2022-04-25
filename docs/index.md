@@ -1,4 +1,4 @@
-# EASS 2022 Part A
+# All Slides
 - Admin
 - Technical debt
 - Business logic
