@@ -1695,7 +1695,7 @@ https://pandas.pydata.org/docs/user_guide/10min.html
 
 1. Dockerfile for Frontend
 2. Include in README.md how to run the Backend and Frontend so they can communicate over HTTP (make sure they are connected on the same Docker network)
-3. Short demo with a movie (Windows Key+G on QuickTime)
+3. Short demo with a movie (Windows Key+G or QuickTime)
 
 Suggested layout of the repo:
 
@@ -1714,7 +1714,7 @@ Suggested layout of the repo:
 # Ex 3 (Due June 19, 2022)
 1. Docker compose
 2. At least 3 microservices
-3. Short demo with a movie (Windows Key+G on QuickTime)
+3. Short demo with a movie (Windows Key+G or QuickTime)
 
 Suggested layout of the repo:
 
@@ -2067,6 +2067,13 @@ COPY . /app
 WORKDIR /app
 ENTRYPOINT ["streamlit", "run", "app.py"]
 ```
+
+
+# Something new from Anaconda
+
+Pyscript
+
+https://github.com/pyscript/pyscript
 
 
 
