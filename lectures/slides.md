@@ -253,7 +253,7 @@ Code coverage – creating tests to satisfy some criteria of code coverage (e.g.
 
 # What Are The Best Software Engineering Principles?
 ## Measure twice and cut once
-![](https://iamluminousmen-media.s3.amazonaws.com/media/what-are-the-best-engineering-principles/what-are-the-best-engineering-principles-3.jpg){ width=300px }
+![](https://cdn.pixabay.com/photo/2021/11/15/12/06/barber-shop-6797941_960_720.jpg){ width=300px }
 
 ## Based on this nice post
 https://luminousmen.com/post/what-are-the-best-engineering-principles
@@ -272,7 +272,7 @@ Some think that this idea transformed from Occam’s Razor philosophical princip
 # What Are The Best Software Engineering Principles?
 ## You Aren’t Gonna Need It (YAGNI)
 Don't implement all the "necessary" (most likely unnecessary) functionality at once from the very beginning of the project.
-![](https://iamluminousmen-media.s3.amazonaws.com/media/m-motivation/m-motivation-7.JPG){ width=300px }
+![](https://media.makeameme.org/created/you-arent-gonna-5b6d6b.jpg){ width=300px }
 
 
 # What Are The Best Software Engineering Principles?
