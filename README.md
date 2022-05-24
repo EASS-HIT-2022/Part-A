@@ -29,4 +29,4 @@ vi mkdocs.yml
 mkdocs serve
 mkdocs gh-deploy --force
 ```
-https://EASS-HIT-2022.github.io/Part-A-Agenda/
+https://eass-hit-2022.github.io/Part-A/
