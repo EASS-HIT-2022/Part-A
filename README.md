@@ -11,7 +11,7 @@ Topics for the semester:
  - [x] HTTP and REST API
  - [x] Microservices
  - [x] Docker
- - [ ] Forntend and Backend
+ - [x] Forntend and Backend
  - [x] Testing
  - [ ] Linkedin, Slack
  - [ ] continuous integration vs continuous deployment (CI/CD)

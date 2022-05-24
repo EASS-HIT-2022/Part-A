@@ -1,4 +1,4 @@
-# All Slides
+# EASS 2022
 - Admin
 - Technical debt
 - Business logic
@@ -6,6 +6,7 @@
 - Git, GitHub
 - Interactive class
 
+<!-- ![](static\\review.png){ height=400px } -->
 ![](https://user-images.githubusercontent.com/553010/165045531-9e8e25ad-15ad-4838-9e74-ab34a2815e0c.PNG){ width=150px }
 
 # Admin stuff
@@ -23,6 +24,7 @@
 - Stackoverflow
 - Engagment on Discord
 - Hackernews
+
 
 
 ###### References:
@@ -52,7 +54,6 @@ https://logz.io/blog/technical-debt/
 - "**Business logic** is the part of your code that specifically implements business rules."
 
 ![](http://www.ritholtz.com/blog/wp-content/uploads/2013/07/2011.06.27_organizational_charts.png){ height=200px }
-
 
 
 ###### References:
@@ -204,7 +205,7 @@ Code coverage – creating tests to satisfy some criteria of code coverage (e.g.
 
 # What Are The Best Software Engineering Principles?
 ## Measure twice and cut once
-![](https://iamluminousmen-media.s3.amazonaws.com/media/what-are-the-best-engineering-principles/what-are-the-best-engineering-principles-3.jpg){ width=300px }
+![](https://cdn.pixabay.com/photo/2021/11/15/12/06/barber-shop-6797941_960_720.jpg){ width=300px }
 
 ## Based on this nice post
 https://luminousmen.com/post/what-are-the-best-engineering-principles
@@ -223,7 +224,7 @@ Some think that this idea transformed from Occam’s Razor philosophical princip
 # What Are The Best Software Engineering Principles?
 ## You Aren’t Gonna Need It (YAGNI)
 Don't implement all the "necessary" (most likely unnecessary) functionality at once from the very beginning of the project.
-![](https://iamluminousmen-media.s3.amazonaws.com/media/m-motivation/m-motivation-7.JPG){ width=300px }
+![](https://media.makeameme.org/created/you-arent-gonna-5b6d6b.jpg){ width=300px }
 
 
 # What Are The Best Software Engineering Principles?
@@ -1640,7 +1641,7 @@ https://pandas.pydata.org/docs/user_guide/10min.html
 
 1. Dockerfile for Frontend
 2. Include in README.md how to run the Backend and Frontend so they can communicate over HTTP (make sure they are connected on the same Docker network)
-3. Short demo with a movie (Windows Key+G on QuickTime)
+3. Short demo with a movie (Windows Key+G or QuickTime)
 
 Suggested layout of the repo:
 
@@ -1659,7 +1660,7 @@ Suggested layout of the repo:
 # Ex 3 (Due June 19, 2022)
 1. Docker compose
 2. At least 3 microservices
-3. Short demo with a movie (Windows Key+G on QuickTime)
+3. Short demo with a movie (Windows Key+G or QuickTime)
 
 Suggested layout of the repo:
 
@@ -2012,6 +2013,13 @@ COPY . /app
 WORKDIR /app
 ENTRYPOINT ["streamlit", "run", "app.py"]
 ```
+
+
+# Something new from Anaconda
+
+Pyscript
+
+https://github.com/pyscript/pyscript
 
 
 
