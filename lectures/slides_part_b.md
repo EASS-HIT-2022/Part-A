@@ -1051,6 +1051,153 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
 
 
+# Deep Learning
+
+Deep learning is a subset of machine learning in which neural networks, algorithms inspired by the brain, learn from large amounts of data. Deep learning is a powerful tool for performing complex tasks such as image classification and natural language processing.
+
+## Neural Networks
+
+A neural network is a machine learning algorithm that is inspired by the brain. Neural networks are composed of a series of interconnected nodes, or neurons, that can learn to recognize patterns of input data.
+
+## Image Classification
+
+Image classification is the process of assigning a label, or class, to an image. Image classification is a task that is typically performed by a neural network.
+
+## Natural Language Processing
+
+Natural language processing is the process of teaching a machine to understand human language. Natural language processing is a task that is typically performed by a neural network.
+
+# Fully connected neural networks
+
+Fully connected neural networks are the standard neural networks that you typically think of. They are made up of layers of nodes, where each node is connected to every other node in the previous and next layer. Training a fully connected neural network is typically done through backpropagation, where the error is propagated backwards through the network to adjust the weights of the connections.
+
+
+Backpropagation:
+
+Given a set of training data {(x1, y1), (x2, y2), ..., (xn, yn)}, where each xi is a input vector and each yi is the corresponding target output vector, backpropagation is a method for computing the gradient of the error function with respect to the weights of the neural network. The gradient is then used to update the weights in order to minimize the error function.
+
+Gradient Error:
+
+The gradient error is the error function with respect to the weights of the neural network. The gradient is then used to update the weights in order to minimize the error function.
+
+# Fully connected neural networks
+A fully connected deep network can be trained to compute the xor(A,B) of two values by using a backpropagation algorithm. The backpropagation algorithm is used to calculate the error gradient of the output layer with respect to the weights of the hidden layer. The error gradient is then used to update the weights of the hidden layer. The backpropagation algorithm is repeated until the error gradient converges to zero.
+
+# Backpropagation
+Backpropagation is the process of adjusting the weights in a neural network so that the network can learn from training data. The weights are adjusted according to the gradient of the error function. The error function is a measure of how far the network's output is from the desired output. The gradient is a vector that points in the direction of the greatest increase in the error function. The weights are updated so that the gradient is reduced, which in turn reduces the error.
+
+The equations for backpropagation are:
+
+$$
+\frac{\partial E}{\partial w_i} = \frac{\partial E}{\partial y} \frac{\partial y}{\partial w_i}
+$$
+
+$$
+\frac{\partial E}{\partial w_i} = \delta_i x_i
+$$
+where:
+
+$E$ is the error function
+
+$w_i$ is the weight for the $i$th input
+
+$y$ is the output of the neural network
+
+$x_i$ is the $i$th input
+
+$\delta_i$ is the error for the $i$th neuron
+
+
+# Backpropagation
+Backpropagation is the process of calculating the gradient of the error function with respect to the weights of the neural network. This is done by propagating the error backwards through the network and calculating the gradient for each weight.
+
+The gradient of the error function with respect to the weights can be calculated as follows:
+
+For each weight w_ij in the network:
+
+$w_ij = w_ij - \text{learningRate} * \text{gradientError}$
+
+where learning_rate is a hyperparameter that controls how much the weights are updated and gradient_error is the gradient of the error function with respect to weight w_ij.
+
+
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.vstack(([0, 0], [0, 1], [1, 0], [1, 1]))
+t = np.array([0, 1, 1, 0]).reshape(-1, 1)
+alpha = 0.5
+W1 = np.random.rand(2, 16)
+W2 = np.random.rand(16, 1)
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+Loss = []
+
+for i in range(10000):
+    z = sigmoid(np.dot(X, W1))
+    y = sigmoid(np.dot(z, W2))
+    loss = 1 / 4 * np.sum((y - t) ** 2)
+    grad_W2 = 2 * (np.dot(z.T, (y - t) * y * (1 - y)))
+    grad_W1 = 2 * np.dot(X.T, np.dot((y - t) * y * (1 - y), W2.T) * z * (1 - z))
+    W2 = W2 - alpha * grad_W2
+    W1 = W1 - alpha * grad_W1
+    Loss.append(loss)
+z = sigmoid(np.dot(X, W1))
+sigmoid(np.dot(z, W2))
+```
+https://towardsdatascience.com/understanding-backpropagation-algorithm-7bb3aa2f95fd
+https://medium.com/analytics-vidhya/neural-network-implementation-for-xor-gate-using-numpy-59eca77b54cc
+https://www.geeksforgeeks.org/implementation-of-artificial-neural-network-for-xor-logic-gate-with-2-bit-binary-input/
+
+
+# using keras
+```python
+from tensorflow import keras
+from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Activation
+
+import numpy as np 
+
+X = np.array([[0,0],[0,1],[1,0],[1,1]])
+y = np.array([[0],[1],[1],[0]])
+
+model = Sequential()
+model.add(Dense(16, input_dim=2))
+model.add(Activation('sigmoid'))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+
+opt =  keras.optimizers.Adam(learning_rate=0.1)
+model.compile(loss='binary_crossentropy', optimizer=opt)
+
+model.fit(X, y, batch_size=1, epochs=100)
+print(model.predict(X))
+```
+
+# Convolutional Neural Networks
+
+Convolutional Neural Networks are a type of neural network that are used for image classification. They are made up of a series of convolutional layers, each of which performs a convolution operation on the input image. The output of each layer is then fed into the next layer, until the final layer produces the output classification.
+
+The convolution operation is performed by sliding a filter over the input image, and performing a matrix multiplication between the filter and the part of the image it is currently over. This produces a new image, which is then fed into the next layer.
+
+Convolution is an operation on two functions that produces a third function that is a modified version of one of the original functions, convolution in 1D is defined as:
+
+$$
+(f*g)[n] = \sum_{m=-\infty}^{\infty} f[m] g[n-m]
+$$
+
+Assuming that the $2m+1 \times 2m+1$ image is grayscale, where $I$ is an image, and $K$ is an $2k+1 \times 2k+1$ kernel:
+
+$$
+(I * K)(x,y) = \sum_{s=-m}^{m} \sum_{t=-k}^{k} I(x-s,y-t) \cdot K(s,t)
+$$
+
+
 # TBD
 
 1 Introduction to the course, ways to make an online project Medium, linkedin, heroku How to write a readable and informative post
@@ -1064,18 +1211,18 @@ STATEFULL systems REDIS, monogodb, mysql sqlalchemy, pydantic, ORM
 12 Advanced Profiling What is profiling and how is it profiled in the Linux and Python environment
 13 Technological analysis and the connection between business logic and business model in the world of software engineering Business models for software products, the connection between them and the software architecture of large companies (Netflix, Uber, etc.) Overview of the various groups
 
-• Familiarity with modern software development and software methodologies
-• Meta-programming (ancillary software development tools other than the software code itself)
-• Debugging and profiling of large systems
-• Work with tabular as well as NOSQL databases
-• Introduction to graphical databases
-• Introduction to advanced frontend and backend systems
-• Systems design with advanced algorrithmic logic, such as:
+- Familiarity with modern software development and software methodologies
+- Meta-programming (ancillary software development tools other than the software code itself)
+- Debugging and profiling of large systems
+- Work with tabular as well as NOSQL databases
+- Introduction to graphical databases
+- Introduction to advanced frontend and backend systems
+- Systems design with advanced algorrithmic logic, such as:
 - Xgboost  based solutions
 - Convolution Networks
-• Use of fastapi
-• References to business models for software ventures
-• Presentation of software projects 
+- Use of fastapi
+- References to business models for software ventures
+- Presentation of software projects 
 
 
 Bitcoin mechanics
